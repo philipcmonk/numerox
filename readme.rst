@@ -27,10 +27,6 @@ create a numerai Data object that takes care of the details::
     model.fit(train.x, train.y)
     yhat = model.predict(predict.x)
 
-We can also index into a particular era::
-
-    data['era92']
-
 (Loading from the zip archive is slow. So I would have a function that creates
 an hdf5 archive.)
 
