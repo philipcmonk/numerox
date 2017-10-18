@@ -6,8 +6,8 @@ import pandas as pd
 
 class Data(object):
 
-    def __init__(self, ID, era, region, x, y):
-        self.ID = ID
+    def __init__(self, ids, era, region, x, y):
+        self.ids = ids
         self.era = era
         self.region = region
         self.x = x
@@ -36,7 +36,7 @@ class Data(object):
         elif typidx is np.ndarray:
             idx = index
 
-        d = Data(self.ID[idx],
+        d = Data(self.ids[idx],
                  self.era[idx],
                  self.region[idx],
                  self.x[idx],
@@ -60,8 +60,8 @@ def load_zip(dataset_zip):
 
     # load
     zf = zipfile.ZipFile(dataset_zip)
-    header, ID, era, region, x, y = load_csv(zf.open(TRAIN_FILE))
-    header2, ID2, era2, region2, x2, y2 = load_csv(zf.open(TOURN_FILE))
+    header, ids, era, region, x, y = load_csv(zf.open(TRAIN_FILE))
+    header2, ids2, era2, region2, x2, y2 = load_csv(zf.open(TOURN_FILE))
 
     # check headers
     header0 = expected_headers()
@@ -71,13 +71,13 @@ def load_zip(dataset_zip):
         raise ValueError('tournament file column header not recognized')
 
     # concatenate train and tournament data
-    ID = np.concatenate((ID, ID2))
+    ids = np.concatenate((ids, ids2))
     era = np.concatenate((era, era2))
     region = np.concatenate((region, region2))
     x = np.concatenate((x, x2))
     y = np.concatenate((y, y2))
 
-    return Data(ID, era, region, x, y)
+    return Data(ids, era, region, x, y)
 
 
 def load_csv(file_like):
@@ -88,7 +88,7 @@ def load_csv(file_like):
     a = a.values
 
     # convert arrays from object dtype
-    ID = a[:, 0].astype(str)
+    ids = a[:, 0].astype(str)
     era = a[:, 1].astype(str)
     region = a[:, 2].astype(str)
     x = a[:, 3:-1].astype(np.float64)
@@ -96,7 +96,7 @@ def load_csv(file_like):
     y[y == ''] = np.nan
     y = y.astype(np.float64)
 
-    return header, ID, era, region, x, y
+    return header, ids, era, region, x, y
 
 
 def expected_headers():
