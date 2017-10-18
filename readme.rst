@@ -64,9 +64,6 @@ If you are interested in having me start working on it (even just having a
 data class would be useful, so that reduces the risk of a full build out),
 let me know and we can discuss compensation.
 
-My bottleneck packages is fully unit tested, uses CI with Travis and Appveyor
-and is packaged by many Linux distributions.
-
 Indexing
 ========
 
