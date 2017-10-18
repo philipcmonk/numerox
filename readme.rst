@@ -89,3 +89,32 @@ let me know and we can discuss compensation.
 
 My bottleneck packages is fully unit tested, uses CI with Travis and Appveyor
 and is packaged by many Linux distributions.
+
+Demo
+====
+
+Here is an indexing demo of the working prototype in ``data.py``::
+
+    In [1]: import numerai as ni
+    In [2]: data = ni.load_zip('numerai_dataset_20171017.zip')
+
+    In [3]: data.size
+    Out[3]: 884545
+
+    # str indexing
+    In [4]: data['era92'].size
+    Out[4]: 6048
+    In [5]: data['eraX'].size
+    Out[5]: 274967
+    In [6]: data['tournament'].size
+    Out[6]: 348832
+    In [7]: data['live'].size
+    Out[7]: 6804
+    In [8]: data['live'].x.shape
+    Out[8]: (6804, 50)
+
+    # ndarray indexing
+    In [9]: data[data.x[:, 0] > 0.5].size
+    Out[9]: 347176
+    In [10]: data[data.x[:, 0] <= 0.5].size
+    Out[10]: 537369
