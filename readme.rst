@@ -52,25 +52,6 @@ results (logloss, consistency, AUC, etc). Once they are happy with their model,
 there is a production function that downloads the data, runs your model and
 uploads the results.
 
-And of course there is all sorts of fun things we could add, like a user
-report::
-
-    $ ni.user_report('bps')
-    bps, 23 rounds
-           0.86957  consistency
-           0.69565  super consistency
-           0.58394  logloss dominance
-          65.00000  best rank
-           0.53713  logloss correlation
-           0.69289  logloss mean
-           0.00048  logloss std
-           0.13043  live < validation
-          50.29000  usd main
-        1825.58000  usd stake
-          52.79000  nmr main
-          50.00000  nmr burn
-        1915.37305  earnings at $14.16/NMR
-
 If we wish to fully build out the package I would add unit tests and CI with
 Travis (and maybe Appveyor). And I would upload it to pypi so that users could
 do::
