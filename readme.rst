@@ -90,8 +90,8 @@ let me know and we can discuss compensation.
 My bottleneck packages is fully unit tested, uses CI with Travis and Appveyor
 and is packaged by many Linux distributions.
 
-Indexing demo
-=============
+Indexing
+========
 
 Here is an indexing demo of the working prototype in ``data.py``::
 
@@ -119,8 +119,8 @@ Here is an indexing demo of the working prototype in ``data.py``::
     In [10]: data[data.x[:, 0] <= 0.5].size
     Out[10]: 537369
 
-Cross validation demo
-======================
+Cross validation
+================
 
 Here is a cross validation demo of the working prototype in ``data.py``::
 
