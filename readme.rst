@@ -90,8 +90,8 @@ let me know and we can discuss compensation.
 My bottleneck packages is fully unit tested, uses CI with Travis and Appveyor
 and is packaged by many Linux distributions.
 
-Demo
-====
+Indexing demo
+=============
 
 Here is an indexing demo of the working prototype in ``data.py``::
 
@@ -118,3 +118,20 @@ Here is an indexing demo of the working prototype in ``data.py``::
     Out[9]: 347176
     In [10]: data[data.x[:, 0] <= 0.5].size
     Out[10]: 537369
+
+Cross validation demo
+======================
+
+Here is a cross validation demo of the working prototype in ``data.py``::
+
+    In [1]: import numerai as ni
+    In [2]: data = ni.load_zip('numerai_dataset_20171017.zip')
+
+    In [3]: for dtrain, dtest in data['train'].cv(kfold=5, random_state=0):
+       ...:     print dtrain.size, dtest.size
+       ...:
+    428887 106826
+    429062 106651
+    428111 107602
+    428225 107488
+    428567 107146

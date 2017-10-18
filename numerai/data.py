@@ -2,6 +2,7 @@ import zipfile
 
 import numpy as np
 import pandas as pd
+from sklearn.model_selection import KFold
 
 
 class Data(object):
@@ -12,6 +13,20 @@ class Data(object):
         self.region = region
         self.x = x
         self.y = y
+
+    def cv(self, kfold=5, random_state=None):
+        kf = KFold(n_splits=kfold, shuffle=True, random_state=random_state)
+        eras = np.unique(self.era)
+        for train_index, test_index in kf.split(eras):
+            idx = np.zeros(self.size, dtype=np.bool)
+            for i in train_index:
+                idx = np.logical_or(idx, self.era == eras[i])
+            dtrain = self[idx]
+            idx = np.zeros(self.size, dtype=np.bool)
+            for i in test_index:
+                idx = np.logical_or(idx, self.era == eras[i])
+            dtest = self[idx]
+            yield dtrain, dtest
 
     def __getitem__(self, index):
 
@@ -35,6 +50,8 @@ class Data(object):
                     idx = np.logical_or(idx, self.region == 'live')
         elif typidx is np.ndarray:
             idx = index
+        else:
+            raise IndexError('indexing type not recognized')
 
         d = Data(self.ids[idx],
                  self.era[idx],
