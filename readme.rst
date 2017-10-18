@@ -36,11 +36,6 @@ And why not add a method that handles cross validation across the eras::
         model.fit(train.x, train.y)
         y = model.predict(predict.x)
 
-Some of the submissions to numerai do not pass consistency and concordance.
-Although these functions are now open source, they are not yet accessible to
-average users. So the package that contains the Data class could also contain
-the consistency, concordance, and originality functions.
-
 The package that I am proposing to write would let the user create a model
 that contains fit and predict methods (examples would be provided) and then
 the package would run a backtest (CV) across the training data and report the
