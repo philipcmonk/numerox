@@ -77,16 +77,14 @@ Here is an indexing demo of the working prototype in ``data.py``::
     Out[5]: 274967
     In [6]: data['tournament'].size
     Out[6]: 348832
-    In [7]: data['live'].size
-    Out[7]: 6804
-    In [8]: data['live'].x.shape
-    Out[8]: (6804, 50)
+    In [7]: data['live'].x.shape
+    Out[7]: (6804, 50)
 
     # ndarray indexing
-    In [9]: data[data.x[:, 0] > 0.5].size
-    Out[9]: 347176
-    In [10]: data[data.x[:, 0] <= 0.5].size
-    Out[10]: 537369
+    In [8]: data[data.x[:, 0] > 0.5].size
+    Out[8]: 347176
+    In [9]: data[data.x[:, 0] <= 0.5].size
+    Out[9]: 537369
 
 Cross validation
 ================
