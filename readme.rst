@@ -43,6 +43,10 @@ results (logloss, consistency, AUC, etc). Once they are happy with their model,
 there is a production function that downloads the data, runs your model and
 uploads the results.
 
+This package would lower the barrier to entry for new users and would improve
+entries by reducing bugs and making sure users properly use cross validation
+and/or splits across eras instead of rows.
+
 If we wish to fully build out the package I would add unit tests and CI with
 Travis (and maybe Appveyor). And I would upload it to pypi so that users could
 do::
