@@ -66,39 +66,41 @@ let me know and we can discuss compensation.
 Indexing
 ========
 
-Here is an indexing demo of the working prototype in ``data.py``::
+Which era do you want to overfit::
 
     In [1]: import numerai as ni
     In [2]: data = ni.load_zip('numerai_dataset_20171017.zip')
 
-    In [3]: data.size
-    Out[3]: 884545
+    In [3]: data['era92'].size
+    Out[3]: 6048
+    In [4]: data['eraX'].size
+    Out[4]: 274967
 
-    # str indexing
-    In [4]: data['era92'].size
-    Out[4]: 6048
-    In [5]: data['eraX'].size
-    Out[5]: 274967
+Here's where the money is::
+
+    In [5]: data['live'].x.shape
+    Out[5]: (6804, 50)
+
+But you will first have to upload predictions for::
+
     In [6]: data['tournament'].size
     Out[6]: 348832
-    In [7]: data['live'].x.shape
-    Out[7]: (6804, 50)
 
-    # ndarray indexing
-    In [8]: data[data.x[:, 0] > 0.5].size
-    Out[8]: 347176
-    In [9]: data[data.x[:, 0] <= 0.5].size
-    Out[9]: 537369
+Besides strings, you can also index with numpy arrays::
+
+    In [7]: data[data.x[:, 0] > 0.5].size
+    Out[7]: 347176
+    In [8]: data[data.x[:, 0] <= 0.5].size
+    Out[8]: 537369
 
 Cross validation
 ================
 
-Here is a cross validation demo of the working prototype in ``data.py``::
+To make your overfitting modestly challenging use cross validation::
 
-    In [1]: import numerai as ni
-    In [2]: data = ni.load_zip('numerai_dataset_20171017.zip')
+    In [1]: data = ni.load_zip('numerai_dataset_20171017.zip')
 
-    In [3]: for dtrain, dtest in data['train'].cv(kfold=5, random_state=0):
+    In [2]: for dtrain, dtest in data['train'].cv(kfold=5, random_state=0):
        ...:     print dtrain.size, dtest.size
        ...:
     428887 106826
