@@ -140,5 +140,5 @@ The name is not currently taken on PyPI. Import::
 
     >>> import numbox as nb
 
-Note: NB is the symbol for niobium (which is a superconductor below 9K) and
-also means take note (as in nota bene).
+NB is the symbol for niobium (which is a superconductor below 9K) and also
+means take note (as in nota bene).

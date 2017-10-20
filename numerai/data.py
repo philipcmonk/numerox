@@ -35,6 +35,8 @@ class Data(object):
         "Return list of column names of features, x, in dataframe"
         cols = self._column_list()
         names = [n for n in cols if n.startswith('feature')]
+        if len(names) == 0:
+            raise IndexError("Could not find any features (x)")
         return names
 
     @property
@@ -67,29 +69,8 @@ class Data(object):
         "Return region as a pandas dataframe"
         return self.df['data_type']
 
-    def cv(self, kfold=5, random_state=None):
-        kf = KFold(n_splits=kfold, shuffle=True, random_state=random_state)
-        # TODO following two lines are awkward
-        era = self.df.era.values.astype(str)
-        eras = self.df.era.unique().astype(str)
-        for train_index, test_index in kf.split(eras):
-            idx = np.zeros(self.size, dtype=np.bool)
-            for i in train_index:
-                idx = np.logical_or(idx, era == eras[i])
-            dtrain = self[idx]
-            idx = np.zeros(self.size, dtype=np.bool)
-            for i in test_index:
-                idx = np.logical_or(idx, era == eras[i])
-            dtest = self[idx]
-            yield dtrain, dtest
-
-    def to_hdf(self, path_or_buf, **kwargs):
-        self.df.to_hdf(path_or_buf, HDF_KEY, **kwargs)
-
     def __getitem__(self, index):
-
         typidx = type(index)
-
         if typidx is str:
             if index.startswith('era'):
                 idx = self.df.era == index
@@ -106,14 +87,25 @@ class Data(object):
                     idx = self.df.data_type == 'validation'
                     idx = np.logical_or(idx, self.df.data_type == 'test')
                     idx = np.logical_or(idx, self.df.data_type == 'live')
-        elif typidx is np.ndarray:
+        elif typidx is pd.Series or typidx is np.ndarray:
             idx = index
         else:
             raise IndexError('indexing type not recognized')
-
         d = Data(self.df[idx])
-
         return d
+
+    def cv(self, kfold=5, random_state=None):
+        kf = KFold(n_splits=kfold, shuffle=True, random_state=random_state)
+        eras = self.era_dh.unique()
+        for train_index, test_index in kf.split(eras):
+            idx = self.df.era.isin(eras[train_index])
+            dtrain = self[idx]
+            idx = self.df.era.isin(eras[test_index])
+            dtest = self[idx]
+            yield dtrain, dtest
+
+    def to_hdf(self, path_or_buf, **kwargs):
+        self.df.to_hdf(path_or_buf, HDF_KEY, **kwargs)
 
     def _column_list(self):
         "Return column names of dataframe as a list"
