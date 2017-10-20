@@ -14,6 +14,24 @@ class Data(object):
     def __init__(self, df):
         self.df = df
 
+    @property
+    def x(self):
+        "Return features as a numpy array"
+        names = self._x_names()
+        return self.df[names].values
+
+    @property
+    def x_df(self):
+        "Return features as a pandas dataframe"
+        names = self._x_names()
+        return self.df[names]
+
+    def _x_names(self):
+        "Return list of column names of features, x, in dataframe"
+        cols = self._column_list()
+        names = [n for n in cols if n.startswith('feature')]
+        return names
+
     def cv(self, kfold=5, random_state=None):
         kf = KFold(n_splits=kfold, shuffle=True, random_state=random_state)
         # TODO following two lines are awkward
@@ -61,6 +79,11 @@ class Data(object):
         d = Data(self.df[idx])
 
         return d
+
+    def _column_list(self):
+        "Return column names of dataframe as a list"
+        # below is faster than list(self.df.columns), not that it matters
+        return self.df.columns.values.tolist()
 
     @property
     def size(self):
