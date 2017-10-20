@@ -125,3 +125,20 @@ Just think how quickly you will overfit the data::
     In [4]: timeit ni.load_hdf('numerai_dataset.h5')
     1 loop, best of 3: 174 ms per loop
 
+Package name
+============
+
+Naming the package numerai is problematic. I think of it as a toolbox. So
+how about using the name numbox as in: Numbox is a Numerai machine learning
+competition toolbox.
+
+Install::
+
+    $ pip install numbox
+
+The name is not currently taken on PyPI. Import::
+
+    >>> import numbox as nb
+
+Note: NB is the symbol for niobium (which is a superconductor below 9K) and
+also means take note (as in nota bene).
