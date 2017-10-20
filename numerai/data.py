@@ -15,6 +15,11 @@ class Data(object):
         self.df = df
 
     @property
+    def ids(self):
+        "Return ids as a numpy str array"
+        return self.df.index.values.astype(str)
+
+    @property
     def x(self):
         "Return features as a numpy array"
         names = self._x_names()
@@ -31,6 +36,36 @@ class Data(object):
         cols = self._column_list()
         names = [n for n in cols if n.startswith('feature')]
         return names
+
+    @property
+    def y(self):
+        "Return targets as a 1d numpy array"
+        return self.df['target'].values
+
+    @property
+    def y_dh(self):
+        "Return targets as a pandas dataframe"
+        return self.df['target']
+
+    @property
+    def era(self):
+        "Return era as a 1d numpy str array"
+        return self.df['era'].values.astype(str)
+
+    @property
+    def era_dh(self):
+        "Return era as a pandas dataframe"
+        return self.df['era']
+
+    @property
+    def region(self):
+        "Return region as a 1d numpy str array"
+        return self.df['data_type'].values.astype(str)
+
+    @property
+    def region_dh(self):
+        "Return region as a pandas dataframe"
+        return self.df['data_type']
 
     def cv(self, kfold=5, random_state=None):
         kf = KFold(n_splits=kfold, shuffle=True, random_state=random_state)
