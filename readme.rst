@@ -1,5 +1,5 @@
-numerai
-=======
+numbox
+======
 
 The example code that is distributed with the numerai dataset contains the
 lines::
@@ -20,7 +20,7 @@ This method of pulling out the numerai data from the pandas dataframe is
 reproduced thoughout the numerai code base. Which suggest that we should
 create a numerai Data object that takes care of the details::
 
-    data = ni.load('numerai_dataset.zip')
+    data = nb.load('numerai_dataset.zip')
     train = data['train']
     predict = data['tournament']
 
@@ -48,7 +48,7 @@ If we wish to fully build out the package I would add unit tests and CI with
 Travis (and maybe Appveyor). And I would upload it to pypi so that users could
 do::
 
-    $ pip install numerai
+    $ pip install numbox
 
 The CI would make it much easier to review PRs. And unit tests would make
 refactoring much easier.
@@ -65,8 +65,8 @@ Indexing
 
 Which era do you want to overfit::
 
-    In [1]: import numerai as ni
-    In [2]: data = ni.load_zip('numerai_dataset_20171017.zip')
+    In [1]: import numbox as nb
+    In [2]: data = nb.load_zip('numerai_dataset_20171017.zip')
 
     In [3]: data['era92'].size
     Out[3]: 6048
@@ -112,7 +112,7 @@ overfitting? Save it to HDF!
 
 Load the dataset from a Numerai zip archive::
 
-    In [1]: data = ni.load_zip('numerai_dataset.zip')
+    In [1]: data = nb.load_zip('numerai_dataset.zip')
 
 Save the data object to HDF::
 
@@ -120,9 +120,9 @@ Save the data object to HDF::
 
 Just think how quickly you will overfit the data::
     
-    In [3]: timeit ni.load_zip('numerai_dataset.zip')
+    In [3]: timeit nb.load_zip('numerai_dataset.zip')
     1 loop, best of 3: 7.31 s per loop
-    In [4]: timeit ni.load_hdf('numerai_dataset.h5')
+    In [4]: timeit nb.load_hdf('numerai_dataset.h5')
     1 loop, best of 3: 174 ms per loop
 
 Package name
@@ -131,14 +131,3 @@ Package name
 Naming the package numerai is problematic. I think of it as a toolbox. So
 how about using the name numbox as in: Numbox is a Numerai machine learning
 competition toolbox.
-
-Install::
-
-    $ pip install numbox
-
-The name is not currently taken on PyPI. Import::
-
-    >>> import numbox as nb
-
-NB is the symbol for niobium (which is a superconductor below 9K) and also
-means take note (as in nota bene).
