@@ -112,12 +112,18 @@ class Data(object):
 
     def _column_list(self):
         "Return column names of dataframe as a list"
-        # below is faster than list(self.df.columns), not that it matters
         return self.df.columns.values.tolist()
 
     @property
     def size(self):
-        return self.df.shape[0]
+        return self.df.size
+
+    @property
+    def shape(self):
+        return self.df.shape
+
+    def __len__(self):
+        return self.df.__len__()
 
 
 def load_hdf(dataset_path):
