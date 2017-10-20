@@ -4,6 +4,10 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import KFold
 
+TRAIN_FILE = 'numerai_training_data.csv'
+TOURN_FILE = 'numerai_tournament_data.csv'
+HDF_KEY = 'data_object'
+
 
 class Data(object):
 
@@ -25,6 +29,9 @@ class Data(object):
                 idx = np.logical_or(idx, era == eras[i])
             dtest = self[idx]
             yield dtrain, dtest
+
+    def to_hdf(self, path_or_buf, **kwargs):
+        self.df.to_hdf(path_or_buf, HDF_KEY, **kwargs)
 
     def __getitem__(self, index):
 
@@ -60,14 +67,15 @@ class Data(object):
         return self.df.shape[0]
 
 
-TRAIN_FILE = 'numerai_training_data.csv'
-TOURN_FILE = 'numerai_tournament_data.csv'
+def load_hdf(dataset_path):
+    df = pd.read_hdf(dataset_path)
+    return Data(df)
 
 
-def load_zip(dataset_zip):
+def load_zip(dataset_path):
 
     # load from numerai zip archive
-    zf = zipfile.ZipFile(dataset_zip)
+    zf = zipfile.ZipFile(dataset_path)
     train = pd.read_csv(zf.open(TRAIN_FILE), header=0, index_col=0)
     tourn = pd.read_csv(zf.open(TOURN_FILE), header=0, index_col=0)
 

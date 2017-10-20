@@ -106,3 +106,25 @@ Here is a cross validation demo of the working prototype in ``data.py``::
     428111 107602
     428225 107488
     428567 107146
+
+Loading data quickly
+====================
+
+Is slow loading of data from a Numerai zip file getting in the way of your
+overfitting? Save it to HDF!
+
+Load the dataset from a Numerai zip archive::
+
+    In [1]: data = ni.load_zip('numerai_dataset.zip')
+
+Save the data object to HDF::
+
+    In [2]: data.to_hdf('numerai_dataset.h5')
+
+Just think how quickly you will overfit the data::
+    
+    In [3]: timeit ni.load_zip('numerai_dataset.zip')
+    1 loop, best of 3: 7.31 s per loop
+    In [4]: timeit ni.load_hdf('numerai_dataset.h5')
+    1 loop, best of 3: 174 ms per loop
+
