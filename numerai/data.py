@@ -70,6 +70,7 @@ class Data(object):
         return self.df['data_type']
 
     def __getitem__(self, index):
+        "Index into a data object. Go ahead, I dare you."
         typidx = type(index)
         if typidx is str:
             if index.startswith('era'):
@@ -95,6 +96,7 @@ class Data(object):
         return d
 
     def cv(self, kfold=5, random_state=None):
+        "Cross validation iterator that yields train, test data across eras"
         kf = KFold(n_splits=kfold, shuffle=True, random_state=random_state)
         eras = self.era_dh.unique()
         for train_index, test_index in kf.split(eras):
@@ -105,6 +107,7 @@ class Data(object):
             yield dtrain, dtest
 
     def to_hdf(self, path_or_buf, **kwargs):
+        "Save data object as a hdf archive"
         self.df.to_hdf(path_or_buf, HDF_KEY, **kwargs)
 
     def _column_list(self):
@@ -118,34 +121,15 @@ class Data(object):
 
 
 def load_hdf(dataset_path):
+    "Load numerai dataset from hdf archive; return Data"
     df = pd.read_hdf(dataset_path)
     return Data(df)
 
 
 def load_zip(dataset_path):
-
-    # load from numerai zip archive
+    "Load numerai dataset from zip archive; return Data"
     zf = zipfile.ZipFile(dataset_path)
     train = pd.read_csv(zf.open(TRAIN_FILE), header=0, index_col=0)
     tourn = pd.read_csv(zf.open(TOURN_FILE), header=0, index_col=0)
-
-    # check headers
-    header0 = expected_headers()
-    header = train.columns.values.astype(str)
-    if (header != header0).any():
-        raise ValueError('train file column header not recognized')
-    header = tourn.columns.values.astype(str)
-    if (header != header0).any():
-        raise ValueError('tournament file column header not recognized')
-
-    # concatenate train and tournament data
     df = pd.concat([train, tourn], axis=0)
-
     return Data(df)
-
-
-def expected_headers():
-    header = ['era', 'data_type']
-    header += ['feature'+str(i) for i in range(1, 51)]
-    header += ['target']
-    return np.array(header)
