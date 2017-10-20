@@ -95,9 +95,7 @@ Cross validation
 
 To make your overfitting modestly challenging use cross validation::
 
-    In [1]: data = ni.load_zip('numerai_dataset_20171017.zip')
-
-    In [2]: for dtrain, dtest in data['train'].cv(kfold=5, random_state=0):
+    In [9]: for dtrain, dtest in data['train'].cv(kfold=5, random_state=0):
        ...:     print dtrain.size, dtest.size
        ...:
     428887 106826
