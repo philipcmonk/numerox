@@ -61,7 +61,7 @@ at Numerai and in the packages you have already open sourced.
 
 If you are interested in having me start working on it (even just having a
 data class would be useful, so that reduces the risk of a full build out),
-let me know and we can discuss compensation.
+let me know and we can discuss funding.
 
 Indexing
 ========
