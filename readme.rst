@@ -27,9 +27,6 @@ create a numerai Data object that takes care of the details::
     model.fit(train.x, train.y)
     yhat = model.predict(predict.x)
 
-(Loading from the zip archive is slow. So I would have a function that creates
-an hdf5 archive.)
-
 And why not add a method that handles cross validation across the eras::
 
     for train, predict in data['train'].cv(kfold=5, random_state=0):
