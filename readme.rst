@@ -150,3 +150,8 @@ Resources
 
 Questions, comments, suggests, money: Numerai's slack channel and on github:
 https://github.com/kwgoodman/numerox
+
+License
+=======
+
+Numerox is distributed under the GPL v3+. See the LICENSE file for details.
