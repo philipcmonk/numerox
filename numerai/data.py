@@ -5,7 +5,7 @@ import pandas as pd
 
 TRAIN_FILE = 'numerai_training_data.csv'
 TOURN_FILE = 'numerai_tournament_data.csv'
-HDF_KEY = 'data_object'
+HDF_KEY = 'numerox_data'
 
 
 class Data(object):
