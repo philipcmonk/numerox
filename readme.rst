@@ -27,12 +27,6 @@ create a numerai Data object that takes care of the details::
     model.fit(train.x, train.y)
     yhat = model.predict(predict.x)
 
-And why not add a method that handles cross validation across the eras::
-
-    for train, predict in data['train'].cv(kfold=5, random_state=0):
-        model.fit(train.x, train.y)
-        y = model.predict(predict.x)
-
 The package that I am proposing to write would let the user create a model
 that contains fit and predict methods (examples would be provided) and then
 the package would run a backtest (CV) across the training data and report the
@@ -83,7 +77,7 @@ But you will first have to upload predictions for::
     In [6]: data['tournament'].size
     Out[6]: 348832
 
-Besides strings, you can also index with numpy arrays::
+Besides strings, you can also index with numpy arrays or pandas series::
 
     In [7]: data[data.x[:, 0] > 0.5].size
     Out[7]: 347176
@@ -95,14 +89,14 @@ Cross validation
 
 To make your overfitting modestly challenging use cross validation::
 
-    In [9]: for dtrain, dtest in data['train'].cv(kfold=5, random_state=0):
-       ...:     print dtrain.size, dtest.size
+    In [9]: for dtrain, dtest in nb.cv(data['train'], kfold=5, random_state=0):
+       ...:     print len(dtrain), len(dtest)
        ...:
-    428887 106826
-    429062 106651
-    428111 107602
-    428225 107488
-    428567 107146
+    428333 107380
+    428841 106872
+    428195 107518
+    428218 107495
+    429265 106448
 
 Loading data quickly
 ====================

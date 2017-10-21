@@ -2,7 +2,6 @@ import zipfile
 
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import KFold
 
 TRAIN_FILE = 'numerai_training_data.csv'
 TOURN_FILE = 'numerai_tournament_data.csv'
@@ -94,17 +93,6 @@ class Data(object):
             raise IndexError('indexing type not recognized')
         d = Data(self.df[idx])
         return d
-
-    def cv(self, kfold=5, random_state=None):
-        "Cross validation iterator that yields train, test data across eras"
-        kf = KFold(n_splits=kfold, shuffle=True, random_state=random_state)
-        eras = self.era_dh.unique()
-        for train_index, test_index in kf.split(eras):
-            idx = self.df.era.isin(eras[train_index])
-            dtrain = self[idx]
-            idx = self.df.era.isin(eras[test_index])
-            dtest = self[idx]
-            yield dtrain, dtest
 
     def to_hdf(self, path_or_buf, **kwargs):
         "Save data object as a hdf archive"
