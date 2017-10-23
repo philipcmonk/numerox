@@ -9,7 +9,7 @@ model)::
     from sklearn.linear_model import LogisticRegression
     from numerox.core import api
 
-    class MyModel(api.Model):
+    class LogReg(api.Model):
 
         def __init__(self, C):
             # init is not part of api.Model so do whatever you want

@@ -48,24 +48,22 @@ class Data(object):
         return self.df['data_type'].values.astype(str)
 
     def __getitem__(self, index):
-        "Index into a data object. Go ahead, I dare you."
+        "Data indexing"
         typidx = type(index)
         if isinstance(index, str):
             if index.startswith('era'):
+                if len(index) < 4:
+                    raise IndexError('length of era string index too short')
                 idx = self.df.era == index
             else:
-                if index == 'train':
-                    idx = self.df.data_type == 'train'
-                elif index == 'validation':
-                    idx = self.df.data_type == 'validation'
-                elif index == 'test':
-                    idx = self.df.data_type == 'test'
-                elif index == 'live':
-                    idx = self.df.data_type == 'live'
+                if index in ('train', 'validation', 'test', 'live'):
+                    idx = self.df.data_type.isin([index])
                 elif index == 'tournament':
-                    idx = self.df.data_type == 'validation'
-                    idx = np.logical_or(idx, self.df.data_type == 'test')
-                    idx = np.logical_or(idx, self.df.data_type == 'live')
+                    idx = self.df.data_type.isin(['validation',
+                                                  'test',
+                                                  'live'])
+                else:
+                    raise IndexError('string index not recognized')
         elif typidx is pd.Series or typidx is np.ndarray:
             idx = index
         else:
