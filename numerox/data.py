@@ -85,6 +85,15 @@ class Data(object):
         "Return column names of dataframe as a list"
         return self.df.columns.values.tolist()
 
+    def unique_era(self):
+        "array of unique eras"
+        return np.unique(self.era)
+
+    def unique_region(self):
+        "array of unique regions"
+        # TODO these are sorted alphabetically; sort by time instead
+        return np.unique(self.region)
+
     @property
     def size(self):
         return self.df.size
@@ -95,6 +104,45 @@ class Data(object):
 
     def __len__(self):
         return self.df.__len__()
+
+    def __repr__(self):
+
+        t = []
+        fmt = '{:<10}{:<}'
+
+        # region
+        r = self.unique_region()
+        stats = ', '.join(r)
+        t.append(fmt.format('region', stats))
+
+        # ids
+        t.append(fmt.format('rows', len(self)))
+
+        # era
+        e = self.unique_era()
+        stats = '{}, {} - {}'.format(e.size, e[0], e[-1])
+        t.append(fmt.format('era', stats))
+
+        # x
+        x = self.x
+        stats = '{}, min {:.4f}, mean {:.4f}, max {:.4f}'
+        stats = stats.format(x.shape[1], x.min(), x.mean(), x.max())
+        t.append(fmt.format('x', stats))
+
+        # y
+        y = self.y
+        idx = np.isnan(y)
+        frac = idx.mean()
+        if idx.sum() > 0:
+            mean = y[~idx].mean()
+        else:
+            # avoid numpy warning "Mean of empty slice"
+            mean = np.nan
+        stats = 'mean {:.6f}, fraction missing {:.4f}'
+        stats = stats.format(mean, frac)
+        t.append(fmt.format('y', stats))
+
+        return '\n'.join(t)
 
 
 def load_hdf(dataset_path):

@@ -76,6 +76,12 @@ Load the dataset from a Numerai zip archive::
 
     import numerox as nx
     data = nx.load_zip('numerai_dataset.zip')
+    data
+    region    live, test, train, validation
+    rows      884545
+    era       98, era1 - eraX
+    x         50, min 0.0000, mean 0.4993, max 1.0000
+    y         mean 0.499961, fraction missing 0.3109
 
 Save data object to HDF::
 
@@ -93,22 +99,30 @@ Indexing
 
 Which era do you want to overfit::
 
-    In [3]: len(data['era92'])
-    Out[3]: 6048
-    In [4]: len(data['eraX'])
-    Out[4]: 274967
+    In [3]: data['era92']
+    Out[3]:
+    region    validation
+    rows      6048
+    era       1, era92 - era92
+    x         50, min 0.0308, mean 0.4993, max 1.0000
+    y         mean 0.500000, fraction missing 0.0000
+
+    In [4]: data['eraX']
+    Out[4]:
+    region    live, test
+    rows      274967
+    era       1, eraX - eraX
+    x         50, min 0.0000, mean 0.4992, max 1.0000
+    y         mean nan, fraction missing 1.0000
 
 Here's where the money is::
 
-    In [5]: data['live'].x
-    Out[5]:
-    array([[ 0.44528,  0.54614,  0.7495 , ...,  0.72822,  0.38965,  0.45422],
-           [ 0.39358,  0.59676,  0.54018, ...,  0.54839,  0.45487,  0.3092 ],
-           [ 0.41948,  0.21274,  0.41617, ...,  0.56515,  0.49289,  0.64172],
-           ...,
-           [ 0.58081,  0.56891,  0.48076, ...,  0.69221,  0.48768,  0.44878],
-           [ 0.41867,  0.54406,  0.53561, ...,  0.47159,  0.49141,  0.49558],
-           [ 0.53379,  0.39891,  0.50305, ...,  0.4391 ,  0.40262,  0.48789]])
+    In [5]: data['live']
+    region    live
+    rows      6804
+    era       1, eraX - eraX
+    x         50, min 0.0348, mean 0.4993, max 0.9897
+    y         mean nan, fraction missing 1.0000
 
 Besides strings, you can also index with numpy arrays or pandas series.
 
