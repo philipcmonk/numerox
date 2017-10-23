@@ -85,14 +85,14 @@ Load the dataset from a Numerai zip archive::
 
 Save data object to HDF::
 
-    >>> data.to_hdf('numerai_dataset.h5')
+    >>> data.save('numerai_dataset.hdf')
 
 Just think how quickly you will overfit the data::
 
+    >>> timeit nx.load('numerai_dataset.hdf')
+    1 loop, best of 3: 174 ms per loop
     >>> timeit nx.load_zip('numerai_dataset.zip')
     1 loop, best of 3: 7.31 s per loop
-    >>> timeit nx.load_hdf('numerai_dataset.h5')
-    1 loop, best of 3: 174 ms per loop
 
 Indexing
 ========

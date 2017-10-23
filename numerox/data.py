@@ -77,8 +77,8 @@ class Data(object):
         "Copy of data"
         return Data(self.df.copy())
 
-    def to_hdf(self, path_or_buf, compress=False):
-        "Save data object as a hdf archive"
+    def save(self, path_or_buf, compress=False):
+        "Save data as an hdf archive"
         if compress:
             self.df.to_hdf(path_or_buf, HDF_KEY, complib='zlib', complevel=4)
         else:
@@ -147,7 +147,7 @@ class Data(object):
         return '\n'.join(t)
 
 
-def load_hdf(dataset_path):
+def load(dataset_path):
     "Load numerai dataset from hdf archive; return Data"
     df = pd.read_hdf(dataset_path)
     return Data(df)
