@@ -73,6 +73,10 @@ class Data(object):
         d = Data(self.df[idx])
         return d
 
+    def copy(self):
+        "Copy of data"
+        return Data(self.df.copy())
+
     def to_hdf(self, path_or_buf, **kwargs):
         "Save data object as a hdf archive"
         self.df.to_hdf(path_or_buf, HDF_KEY, **kwargs)
