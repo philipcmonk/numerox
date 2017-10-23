@@ -24,12 +24,6 @@ class Data(object):
         names = self._x_names()
         return self.df[names].values
 
-    @property
-    def x_df(self):
-        "Return features as a pandas dataframe"
-        names = self._x_names()
-        return self.df[names]
-
     def _x_names(self):
         "Return list of column names of features, x, in dataframe"
         cols = self._column_list()
@@ -44,29 +38,14 @@ class Data(object):
         return self.df['target'].values
 
     @property
-    def y_dh(self):
-        "Return targets as a pandas dataframe"
-        return self.df['target']
-
-    @property
     def era(self):
         "Return era as a 1d numpy str array"
         return self.df['era'].values.astype(str)
 
     @property
-    def era_dh(self):
-        "Return era as a pandas dataframe"
-        return self.df['era']
-
-    @property
     def region(self):
         "Return region as a 1d numpy str array"
         return self.df['data_type'].values.astype(str)
-
-    @property
-    def region_dh(self):
-        "Return region as a pandas dataframe"
-        return self.df['data_type']
 
     def __getitem__(self, index):
         "Index into a data object. Go ahead, I dare you."

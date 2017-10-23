@@ -113,7 +113,7 @@ Here's where the money is::
 Besides strings, you can also index with numpy arrays or pandas series.
 
 You can pull out numpy arrays like so ``data.x``, ``data.y``, ``data.era``,
-and pandas dataframes like so ``data.x_df``, ``data.y_df``, ``data.era_df``.
+etc.
 
 
 Cross validation
