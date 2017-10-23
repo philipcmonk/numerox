@@ -63,8 +63,7 @@ I lied
 ======
 
 The examples above are merely my plan for numerox. This preview release only
-includes the Data class. All examples below run. Numerox does not yet include
-unit tests (yikes!).
+includes the Data class and has minimal unit tests coverage (yikes!).
 
 Load data quickly
 =================
@@ -150,12 +149,25 @@ This is what you need to run numerox::
 - python
 - numpy
 - pandas
-- pytables (fast archiving)
+- pytables
 - sklearn
+- nose (unit tests)
 
 Install with pipi (not yet working)::
 
     $ sudo pip install numerox
+
+After you have installed numerox, run the suite of unit tests::
+
+    >>> import numerox as nx
+    >>> nx.test()
+    <snip>
+    Ran 1 tests 0.044s
+    OK
+    <nose.result.TextTestResult run=1 errors=0 failures=0>
+
+Please report any unit test errors or failures.
+
 
 Resources
 =========
