@@ -50,7 +50,7 @@ class Data(object):
     def __getitem__(self, index):
         "Index into a data object. Go ahead, I dare you."
         typidx = type(index)
-        if typidx is str:
+        if isinstance(index, str):
             if index.startswith('era'):
                 idx = self.df.era == index
             else:
@@ -77,9 +77,12 @@ class Data(object):
         "Copy of data"
         return Data(self.df.copy())
 
-    def to_hdf(self, path_or_buf, **kwargs):
+    def to_hdf(self, path_or_buf, compress=False):
         "Save data object as a hdf archive"
-        self.df.to_hdf(path_or_buf, HDF_KEY, **kwargs)
+        if compress:
+            self.df.to_hdf(path_or_buf, HDF_KEY, complib='zlib', complevel=4)
+        else:
+            self.df.to_hdf(path_or_buf, HDF_KEY)
 
     def _column_list(self):
         "Return column names of dataframe as a list"

@@ -64,7 +64,7 @@ I lied
 
 The examples above are merely my plan for numerox. This preview release only
 includes the Data class. All examples below run. Numerox does not yet include
-unit tests (yikes!) so it is too early to mortgage your house for stake money.
+unit tests (yikes!).
 
 Load data quickly
 =================
