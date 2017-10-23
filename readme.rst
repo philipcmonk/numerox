@@ -74,9 +74,9 @@ Use HDF!
 
 Load the dataset from a Numerai zip archive::
 
-    import numerox as nx
-    data = nx.load_zip('numerai_dataset.zip')
-    data
+    >>> import numerox as nx
+    >>> data = nx.load_zip('numerai_dataset.zip')
+    >>> data
     region    live, test, train, validation
     rows      884545
     era       98, era1 - eraX
@@ -85,13 +85,13 @@ Load the dataset from a Numerai zip archive::
 
 Save data object to HDF::
 
-    data.to_hdf('numerai_dataset.h5')
+    >>> data.to_hdf('numerai_dataset.h5')
 
 Just think how quickly you will overfit the data::
 
-    In [1]: timeit nx.load_zip('numerai_dataset.zip')
+    >>> timeit nx.load_zip('numerai_dataset.zip')
     1 loop, best of 3: 7.31 s per loop
-    In [2]: timeit nx.load_hdf('numerai_dataset.h5')
+    >>> timeit nx.load_hdf('numerai_dataset.h5')
     1 loop, best of 3: 174 ms per loop
 
 Indexing
@@ -99,16 +99,14 @@ Indexing
 
 Which era do you want to overfit::
 
-    In [3]: data['era92']
-    Out[3]:
+    >>> data['era92']
     region    validation
     rows      6048
     era       1, era92 - era92
     x         50, min 0.0308, mean 0.4993, max 1.0000
     y         mean 0.500000, fraction missing 0.0000
 
-    In [4]: data['eraX']
-    Out[4]:
+    >>> data['eraX']
     region    live, test
     rows      274967
     era       1, eraX - eraX
@@ -117,7 +115,7 @@ Which era do you want to overfit::
 
 Here's where the money is::
 
-    In [5]: data['live']
+    >>> data['live']
     region    live
     rows      6804
     era       1, eraX - eraX
@@ -135,7 +133,7 @@ Cross validation
 
 To make your overfitting modestly challenging use cross validation::
 
-    In [6]: for dtrain, dtest in nx.cv(data['train'], kfold=5, random_state=0):
+    >>> for dtrain, dtest in nx.cv(data['train'], kfold=5, random_state=0):
        ...:     print len(dtrain), len(dtest)
        ...:
     428333 107380

@@ -91,7 +91,6 @@ class Data(object):
 
     def unique_region(self):
         "array of unique regions"
-        # TODO these are sorted alphabetically; sort by time instead
         return np.unique(self.region)
 
     @property
