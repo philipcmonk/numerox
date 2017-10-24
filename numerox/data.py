@@ -111,7 +111,21 @@ class Data(object):
         return self.df.shape
 
     def __len__(self):
+        "Number of rows"
         return self.df.__len__()
+
+    def __eq__(self, other_data):
+        "Check if data objects are equal (True) or not (False); order matters"
+        return self.df.equals(other_data.df)
+
+    def __add__(self, other_data):
+        try:
+            df = pd.concat((self.df, other_data.df), verify_integrity=True)
+        except ValueError:
+            # pandas doesn't raise expected IndexError and for our large data
+            # object, the id overlaps that it prints can be very long so
+            raise IndexError("Overlap in ids found")
+        return Data(df)
 
     def __repr__(self):
 
