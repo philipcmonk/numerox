@@ -85,7 +85,7 @@ class Data(object):
 
     def copy(self):
         "Copy of data"
-        return Data(self.df.copy())
+        return Data(self.df.copy(deep=True))
 
     def save(self, path_or_buf, compress=False):
         "Save data as an hdf archive"
@@ -143,6 +143,14 @@ class Data(object):
             # object, the id overlaps that it prints can be very long so
             raise IndexError("Overlap in ids found")
         return Data(df)
+
+    def shares_memory(self, other_data):
+        for col in self._column_list():
+            a1 = self.df[col].values
+            a2 = other_data.df[col].values
+            if np.shares_memory(a1, a2):
+                return True
+        return False
 
     def __repr__(self):
 
