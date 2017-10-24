@@ -20,10 +20,45 @@ class Data(object):
         return self.df.index.values.astype(str)
 
     @property
+    def era(self):
+        "Return era as a 1d numpy str array"
+        return self.df['era'].values.astype(str)
+
+    def era_isin(self, eras):
+        "Copy of data that contrain only the eras in the iterable `eras`"
+        idx = self.df.era.isin(eras)
+        return self[idx]
+
+    def unique_era(self):
+        "array of unique eras"
+        return np.unique(self.era)
+
+    @property
+    def region(self):
+        "Return region as a 1d numpy str array"
+        return self.df['region'].values.astype(str)
+
+    def region_isin(self, regions):
+        "Copy of data that contrain only the regions in the iterable `regions`"
+        idx = self.df.region.isin(regions)
+        return self[idx]
+
+    def unique_region(self):
+        "array of unique regions"
+        return np.unique(self.region)
+
+    @property
     def x(self):
         "Return features, x, as a numpy array"
         names = self._x_names()
         return self.df[names].values
+
+    def replace_x(self, x_new):
+        "Copy of data but with data.x=`x_new`; must have same number of rows"
+        df = self.df.copy()
+        xname = self._x_names()
+        df[xname] = x_new
+        return Data(df)
 
     def _x_names(self):
         "Return list of column names of features, x, in dataframe"
@@ -38,15 +73,28 @@ class Data(object):
         "Return y as a 1d numpy array"
         return self.df['y'].values
 
-    @property
-    def era(self):
-        "Return era as a 1d numpy str array"
-        return self.df['era'].values.astype(str)
+    def copy(self):
+        "Copy of data"
+        return Data(self.df.copy())
+
+    def save(self, path_or_buf, compress=False):
+        "Save data as an hdf archive"
+        if compress:
+            self.df.to_hdf(path_or_buf, HDF_KEY, complib='zlib', complevel=4)
+        else:
+            self.df.to_hdf(path_or_buf, HDF_KEY)
+
+    def _column_list(self):
+        "Return column names of dataframe as a list"
+        return self.df.columns.values.tolist()
 
     @property
-    def region(self):
-        "Return region as a 1d numpy str array"
-        return self.df['region'].values.astype(str)
+    def size(self):
+        return self.df.size
+
+    @property
+    def shape(self):
+        return self.df.shape
 
     def __getitem__(self, index):
         "Data indexing"
@@ -68,54 +116,6 @@ class Data(object):
             return Data(self.df[idx])
         else:
             raise IndexError('indexing type not recognized')
-
-    def era_isin(self, eras):
-        "Copy of data that contrain only the eras in the iterable `eras`"
-        idx = self.df.era.isin(eras)
-        return self[idx]
-
-    def region_isin(self, regions):
-        "Copy of data that contrain only the regions in the iterable `regions`"
-        idx = self.df.region.isin(regions)
-        return self[idx]
-
-    def copy(self):
-        "Copy of data"
-        return Data(self.df.copy())
-
-    def save(self, path_or_buf, compress=False):
-        "Save data as an hdf archive"
-        if compress:
-            self.df.to_hdf(path_or_buf, HDF_KEY, complib='zlib', complevel=4)
-        else:
-            self.df.to_hdf(path_or_buf, HDF_KEY)
-
-    def _column_list(self):
-        "Return column names of dataframe as a list"
-        return self.df.columns.values.tolist()
-
-    def unique_era(self):
-        "array of unique eras"
-        return np.unique(self.era)
-
-    def unique_region(self):
-        "array of unique regions"
-        return np.unique(self.region)
-
-    def replace_x(self, x_new):
-        "Copy of data but with data.x=`x_new`; must have same number of rows"
-        df = self.df.copy()
-        xname = self._x_names()
-        df[xname] = x_new
-        return Data(df)
-
-    @property
-    def size(self):
-        return self.df.size
-
-    @property
-    def shape(self):
-        return self.df.shape
 
     def __len__(self):
         "Number of rows"
