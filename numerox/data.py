@@ -142,7 +142,7 @@ class Data(object):
 
         # era
         e = self.unique_era()
-        stats = '{}, {} - {}'.format(e.size, e[0], e[-1])
+        stats = '{}, [{}, {}]'.format(e.size, e[0], e[-1])
         t.append(fmt.format('era', stats))
 
         # x

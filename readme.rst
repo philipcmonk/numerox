@@ -7,33 +7,27 @@ All you have to do is create a model. (Look away while I type my prize-winning
 model)::
 
     from sklearn.linear_model import LogisticRegression
-    from numerox.core import api
 
-    class LogReg(api.Model):
+    class LogReg(object):  # must have fit and predict methods
 
-        def __init__(self, C):
-            # init is not part of api.Model so do whatever you want
+        def __init__(self, C):  # use whatever input parameters you need
             self.C = C
             self.model = None
 
-        def fit(self, data, seed):
-            # seed is not used in this model but is part of the Model api
+        def fit(self, data):  # data must be the only input parameter
             self.model = LogisticRegression(C=self.C)
             self.model.fit(data.x, data.y)
 
-        def predict(self, data):
+        def predict(self, data):  # data must be the only input parameter
             if self.model is None:
                 raise ValueError("model has not been fit")
             yhat = self.model.predict_prob(data.x)[:, 1]
             return data.ids, yhat
 
-(api.Model is an abstract base class that defines and enforces the interface
-that numerox expects from your model.)
-
 Once you have a model numerox will do the rest::
 
     model = MyModel(C=1)
-    data = nx.load_zip('numerai_dataset.zip')
+    data = nx.load('numerai_dataset.hdf')
     # pick a random seed that equals hoped for USD prize money
     prediction = nx.backtest(model, data, kfold=5, seed=1000)
 
@@ -53,82 +47,80 @@ tournament::
     prediction = nx.production(model, data, seed=0)
     prediction.to_csv('mymodel.csv')
 
-If you want to look at the results in more detail, make a report::
-
-    report = nx.Report(data, prediction)
-    report.auc()
-    ...
-
 I lied
 ======
 
 The examples above are merely my plan for numerox. This preview release only
 includes the Data class and has minimal unit tests coverage (yikes!).
 
-Load data quickly
-=================
+Data class
+==========
 
-Is slow loading of Numerai zip files getting in the way of your overfitting?
-Use HDF!
-
-Load the dataset from a Numerai zip archive::
+You can create a data object from the zip archive provided by Numerai::
 
     >>> import numerox as nx
     >>> data = nx.load_zip('numerai_dataset.zip')
     >>> data
     region    live, test, train, validation
-    rows      884545
-    era       98, era1 - eraX
+    rows      884544
+    era       98, [era1, eraX]
     x         50, min 0.0000, mean 0.4993, max 1.0000
     y         mean 0.499961, fraction missing 0.3109
 
-Save data object to HDF::
+But that is slow (~7 seconds) which is painful for dedicated overfitters.
+Let's create an HDF5 archive::
 
     >>> data.save('numerai_dataset.hdf')
+    >>> data2 = nx.load('numerai_dataset.hdf')
 
-Just think how quickly you will overfit the data::
+That loads quickly (~0.2 seconds, but takes more disk space than the
+unexpanded zip archive).
 
-    >>> timeit nx.load('numerai_dataset.hdf')
-    1 loop, best of 3: 174 ms per loop
-    >>> timeit nx.load_zip('numerai_dataset.zip')
-    1 loop, best of 3: 7.31 s per loop
+Data indexing is done by rows, not columns::
 
-Indexing
-========
+    >>> data[data.y == 0]
+    region    train, validation
+    rows      304813
+    era       97, [era1, era97]
+    x         50, min 0.0000, mean 0.4993, max 1.0000
+    y         mean 0.000000, fraction missing 0.0000
 
-Which era do you want to overfit::
+You can also index with special strings. Here are two examples::
 
     >>> data['era92']
     region    validation
     rows      6048
-    era       1, era92 - era92
+    era       1, [era92, era92]
     x         50, min 0.0308, mean 0.4993, max 1.0000
     y         mean 0.500000, fraction missing 0.0000
 
-    >>> data['eraX']
+    >>> data['tournament']
+    region    live, test, validation
+    rows      348831
+    era       13, [era86, eraX]
+    x         50, min 0.0000, mean 0.4992, max 1.0000
+    y         mean 0.499966, fraction missing 0.7882
+
+If you wish to extract more than one era (I hate these eras)::
+
+    >>> data.era_isin(['era92', 'era93'])
+    region    validation
+    rows      12086
+    era       2, [era92, era93]
+    x         50, min 0.0177, mean 0.4993, max 1.0000
+    y         mean 0.500000, fraction missing 0.0000
+
+The same can be done with regions::
+
+    >>> d.region_isin(['test', 'live'])
     region    live, test
-    rows      274967
-    era       1, eraX - eraX
+    rows      274966
+    era       1, [eraX, eraX]
     x         50, min 0.0000, mean 0.4992, max 1.0000
     y         mean nan, fraction missing 1.0000
 
-Here's where the money is::
-
-    >>> data['live']
-    region    live
-    rows      6804
-    era       1, eraX - eraX
-    x         50, min 0.0348, mean 0.4993, max 0.9897
-    y         mean nan, fraction missing 1.0000
-
-Besides strings, you can also index with numpy arrays or pandas series.
-
-You can pull out numpy arrays like so ``data.x``, ``data.y``, ``data.era``,
-etc.
-
-
-Cross validation
-================
+You can pull out numpy arrays like so ``data.ids``, ``data.era``,
+``data.region``, ``data.x``, ``data.y``.
 
 To make your overfitting modestly challenging use cross validation::
 
@@ -167,7 +159,6 @@ After you have installed numerox, run the suite of unit tests::
     <nose.result.TextTestResult run=1 errors=0 failures=0>
 
 Please report any unit test errors or failures.
-
 
 Resources
 =========
