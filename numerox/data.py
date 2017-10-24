@@ -14,10 +14,14 @@ class Data(object):
     def __init__(self, df):
         self.df = df
 
+    # ids -------------------------------------------------------------------
+
     @property
     def ids(self):
         "Return ids as a numpy str array"
         return self.df.index.values.astype(str)
+
+    # era -------------------------------------------------------------------
 
     @property
     def era(self):
@@ -33,6 +37,8 @@ class Data(object):
         "array of unique eras"
         return np.unique(self.era)
 
+    # region ----------------------------------------------------------------
+
     @property
     def region(self):
         "Return region as a 1d numpy str array"
@@ -46,6 +52,8 @@ class Data(object):
     def unique_region(self):
         "array of unique regions"
         return np.unique(self.region)
+
+    # x ---------------------------------------------------------------------
 
     @property
     def x(self):
@@ -67,6 +75,8 @@ class Data(object):
         if len(names) == 0:
             raise IndexError("Could not find any features (x)")
         return names
+
+    # y ---------------------------------------------------------------------
 
     @property
     def y(self):
