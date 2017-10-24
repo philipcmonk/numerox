@@ -4,8 +4,9 @@ import numpy as np
 import pandas as pd
 
 TRAIN_FILE = 'numerai_training_data.csv'
-TOURN_FILE = 'numerai_tournament_data.csv'
+TOURNAMENT_FILE = 'numerai_tournament_data.csv'
 HDF_KEY = 'numerox_data'
+TOURNAMENT_REGIONS = ['validation', 'test', 'live']
 
 
 class Data(object):
@@ -20,22 +21,22 @@ class Data(object):
 
     @property
     def x(self):
-        "Return features as a numpy array"
+        "Return features, x, as a numpy array"
         names = self._x_names()
         return self.df[names].values
 
     def _x_names(self):
         "Return list of column names of features, x, in dataframe"
         cols = self._column_list()
-        names = [n for n in cols if n.startswith('feature')]
+        names = [n for n in cols if n.startswith('x')]
         if len(names) == 0:
             raise IndexError("Could not find any features (x)")
         return names
 
     @property
     def y(self):
-        "Return targets as a 1d numpy array"
-        return self.df['target'].values
+        "Return y as a 1d numpy array"
+        return self.df['y'].values
 
     @property
     def era(self):
@@ -45,7 +46,7 @@ class Data(object):
     @property
     def region(self):
         "Return region as a 1d numpy str array"
-        return self.df['data_type'].values.astype(str)
+        return self.df['region'].values.astype(str)
 
     def __getitem__(self, index):
         "Data indexing"
@@ -54,22 +55,29 @@ class Data(object):
             if index.startswith('era'):
                 if len(index) < 4:
                     raise IndexError('length of era string index too short')
-                idx = self.df.era == index
+                return self.era_isin([index])
             else:
                 if index in ('train', 'validation', 'test', 'live'):
-                    idx = self.df.data_type.isin([index])
+                    return self.region_isin([index])
                 elif index == 'tournament':
-                    idx = self.df.data_type.isin(['validation',
-                                                  'test',
-                                                  'live'])
+                    return self.region_isin(TOURNAMENT_REGIONS)
                 else:
                     raise IndexError('string index not recognized')
         elif typidx is pd.Series or typidx is np.ndarray:
             idx = index
+            return Data(self.df[idx])
         else:
             raise IndexError('indexing type not recognized')
-        d = Data(self.df[idx])
-        return d
+
+    def era_isin(self, eras):
+        "Copy of data that contrain only the eras in the iterable `eras`"
+        idx = self.df.era.isin(eras)
+        return self[idx]
+
+    def region_isin(self, regions):
+        "Copy of data that contrain only the regions in the iterable `regions`"
+        idx = self.df.region.isin(regions)
+        return self[idx]
 
     def copy(self):
         "Copy of data"
@@ -133,8 +141,9 @@ class Data(object):
         y = self.y
         idx = np.isnan(y)
         frac = idx.mean()
+        idx = ~idx
         if idx.sum() > 0:
-            mean = y[~idx].mean()
+            mean = y[idx].mean()
         else:
             # avoid numpy warning "Mean of empty slice"
             mean = np.nan
@@ -155,6 +164,10 @@ def load_zip(dataset_path):
     "Load numerai dataset from zip archive; return Data"
     zf = zipfile.ZipFile(dataset_path)
     train = pd.read_csv(zf.open(TRAIN_FILE), header=0, index_col=0)
-    tourn = pd.read_csv(zf.open(TOURN_FILE), header=0, index_col=0)
+    tourn = pd.read_csv(zf.open(TOURNAMENT_FILE), header=0, index_col=0)
     df = pd.concat([train, tourn], axis=0)
+    rename_map = {'data_type': 'region', 'target': 'y'}
+    for i in range(1, 51):
+        rename_map['feature' + str(i)] = 'x' + str(i)
+    df.rename(columns=rename_map, inplace=True)
     return Data(df)
