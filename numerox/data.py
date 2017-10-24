@@ -102,6 +102,13 @@ class Data(object):
         "array of unique regions"
         return np.unique(self.region)
 
+    def replace_x(self, x_new):
+        "Copy of data but with data.x=`x_new`; must have same number of rows"
+        df = self.df.copy()
+        xname = self._x_names()
+        df[xname] = x_new
+        return Data(df)
+
     @property
     def size(self):
         return self.df.size

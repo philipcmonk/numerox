@@ -159,7 +159,8 @@ Install with pipi (not yet working)::
 
     $ sudo pip install numerox
 
-After you have installed numerox, run the suite of unit tests::
+After you have installed numerox, run the unit tests (please report any
+failures)::
 
     >>> import numerox as nx
     >>> nx.test()
@@ -167,8 +168,6 @@ After you have installed numerox, run the suite of unit tests::
     Ran 1 tests 0.044s
     OK
     <nose.result.TextTestResult run=1 errors=0 failures=0>
-
-Please report any unit test errors or failures.
 
 Resources
 =========
