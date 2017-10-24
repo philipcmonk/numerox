@@ -110,7 +110,7 @@ If you wish to extract more than one era (I hate these eras)::
     x         50, min 0.0177, mean 0.4993, max 1.0000
     y         mean 0.500000, fraction missing 0.0000
 
-The same can be done with regions::
+You can do the same with regions::
 
     >>> d.region_isin(['test', 'live'])
     region    live, test
@@ -118,6 +118,16 @@ The same can be done with regions::
     era       1, [eraX, eraX]
     x         50, min 0.0000, mean 0.4992, max 1.0000
     y         mean nan, fraction missing 1.0000
+
+You can concatenate data objects (as long as the ids don't overlap) by
+adding them together. Let's add validation era92 to the training data::
+
+    >>> data['train'] + data['era92']
+    region    train, validation
+    rows      541761
+    era       86, [era1, era92]
+    x         50, min 0.0000, mean 0.4993, max 1.0000
+    y         mean 0.499960, fraction missing 0.0000
 
 You can pull out numpy arrays like so ``data.ids``, ``data.era``,
 ``data.region``, ``data.x``, ``data.y``.
