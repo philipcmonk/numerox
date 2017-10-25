@@ -1,6 +1,6 @@
 # flake8: noqa
 
-from numerox.data import Data, load, load_zip
+from numerox.data import Data, load, load_zip, concat
 from numerox.util import cv, row_sample
 from numerox.version import __version__
 

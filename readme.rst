@@ -139,6 +139,15 @@ adding them together. Let's add validation era92 to the training data::
     x         50, min 0.0000, mean 0.4993, max 1.0000
     y         mean 0.499960, fraction missing 0.0000
 
+Or, let's go crazy::
+
+    >>> nx.concat([data['live'], data['era1'], data['era92']])
+    region    live, train, validation
+    rows      19194
+    era       3, [era1, eraX]
+    x         50, min 0.0000, mean 0.4992, max 1.0000
+    y         mean 0.499960, fraction missing 0.3544
+
 You can pull out numpy arrays like so ``data.ids``, ``data.era``,
 ``data.region``, ``data.x``, ``data.y``.
 

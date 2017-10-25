@@ -146,13 +146,7 @@ class Data(object):
         return self.df.equals(other_data.df)
 
     def __add__(self, other_data):
-        try:
-            df = pd.concat((self.df, other_data.df), verify_integrity=True)
-        except ValueError:
-            # pandas doesn't raise expected IndexError and for our large data
-            # object, the id overlaps that it prints can be very long so
-            raise IndexError("Overlap in ids found")
-        return Data(df)
+        return concat([self, other_data])
 
     def shares_memory(self, other_data):
         for col in self._column_list():
@@ -219,4 +213,16 @@ def load_zip(dataset_path):
     for i in range(1, 51):
         rename_map['feature' + str(i)] = 'x' + str(i)
     df.rename(columns=rename_map, inplace=True)
+    return Data(df)
+
+
+def concat(datas):
+    "Concatenate data objects; ids must not overlap; datas is an iterable"
+    dfs = [d.df for d in datas]
+    try:
+        df = pd.concat(dfs, verify_integrity=True)
+    except ValueError:
+        # pandas doesn't raise expected IndexError and for our large data
+        # object, the id overlaps that it prints can be very long so
+        raise IndexError("Overlap in ids found")
     return Data(df)
