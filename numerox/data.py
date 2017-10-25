@@ -71,11 +71,11 @@ class Data(object):
         names = self._x_names()
         return self.df[names].values
 
-    def replace_x(self, x_new):
-        "Copy of data but with data.x=`x_new`; must have same number of rows"
+    def replace_x(self, x_array):
+        "Copy of data but with data.x=`x_array`; must have same number of rows"
         df = self.df.copy()
         xname = self._x_names()
-        df[xname] = x_new
+        df[xname] = x_array
         return Data(df)
 
     def _x_names(self):
@@ -85,6 +85,13 @@ class Data(object):
         if len(names) == 0:
             raise IndexError("Could not find any features (x)")
         return names
+
+    @property
+    def xshape(self):
+        "Shape (nrows, ncols) of x"
+        rows = self.df.shape[0]
+        cols = len(self._x_names())
+        return (rows, cols)
 
     # y ---------------------------------------------------------------------
 

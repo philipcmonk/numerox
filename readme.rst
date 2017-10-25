@@ -148,8 +148,8 @@ Or, let's go crazy::
     x         50, min 0.0000, mean 0.4992, max 1.0000
     y         mean 0.499960, fraction missing 0.3544
 
-You can pull out numpy arrays like so ``data.ids``, ``data.era``,
-``data.region``, ``data.x``, ``data.y``.
+You can pull out numpy arrays (copies, not views) like so ``data.ids``,
+``data.era``, ``data.region``, ``data.x``, ``data.y``.
 
 To make your overfitting modestly challenging use cross validation::
 
