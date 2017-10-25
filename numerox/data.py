@@ -25,7 +25,7 @@ class Data(object):
 
     @property
     def era(self):
-        "Return era as a 1d numpy str array"
+        "Copy of era as a 1d numpy str array"
         return self.df['era'].values.astype(str)
 
     def unique_era(self):
@@ -46,7 +46,7 @@ class Data(object):
 
     @property
     def region(self):
-        "Return region as a 1d numpy str array"
+        "Copy of region as a 1d numpy str array"
         return self.df['region'].values.astype(str)
 
     def unique_region(self):
@@ -67,7 +67,7 @@ class Data(object):
 
     @property
     def x(self):
-        "Return features, x, as a numpy array"
+        "Copy of features, x, as a numpy array"
         names = self._x_names()
         return self.df[names].values
 
@@ -90,8 +90,8 @@ class Data(object):
 
     @property
     def y(self):
-        "Return y as a 1d numpy array"
-        return self.df['y'].values
+        "Copy of y as a 1d numpy array"
+        return self.df['y'].values.copy()
 
     def copy(self):
         "Copy of data"
