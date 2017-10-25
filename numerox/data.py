@@ -5,7 +5,7 @@ import pandas as pd
 
 TRAIN_FILE = 'numerai_training_data.csv'
 TOURNAMENT_FILE = 'numerai_tournament_data.csv'
-HDF_KEY = 'numerox_data'
+HDF_DATA_KEY = 'numerox_data'
 TOURNAMENT_REGIONS = ['validation', 'test', 'live']
 
 
@@ -107,9 +107,10 @@ class Data(object):
     def save(self, path_or_buf, compress=False):
         "Save data as an hdf archive"
         if compress:
-            self.df.to_hdf(path_or_buf, HDF_KEY, complib='zlib', complevel=4)
+            self.df.to_hdf(path_or_buf, HDF_DATA_KEY,
+                           complib='zlib', complevel=4)
         else:
-            self.df.to_hdf(path_or_buf, HDF_KEY)
+            self.df.to_hdf(path_or_buf, HDF_DATA_KEY)
 
     def _column_list(self):
         "Return column names of dataframe as a list"
