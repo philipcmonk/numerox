@@ -51,7 +51,8 @@ I lied
 ======
 
 The examples above are merely my plan for numerox. This preview release only
-includes the Data class and has minimal unit tests coverage (yikes!).
+includes the Data class and has minimal unit tests coverage (yikes!). The
+examples below work.
 
 Data class
 ==========
