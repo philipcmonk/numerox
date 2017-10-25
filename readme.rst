@@ -112,12 +112,21 @@ If you wish to extract more than one era (I hate these eras)::
 
 You can do the same with regions::
 
-    >>> d.region_isin(['test', 'live'])
+    >>> data.region_isin(['test', 'live'])
     region    live, test
     rows      274966
     era       1, [eraX, eraX]
     x         50, min 0.0000, mean 0.4992, max 1.0000
     y         mean nan, fraction missing 1.0000
+
+Or you can remove regions (or eras)::
+
+    >>> data.region_isnotin(['test', 'live'])
+    region    train, validation
+    rows      609578
+    era       97, [era1, era97]
+    x         50, min 0.0000, mean 0.4993, max 1.0000
+    y         mean 0.499961, fraction missing 0.0000
 
 You can concatenate data objects (as long as the ids don't overlap) by
 adding them together. Let's add validation era92 to the training data::

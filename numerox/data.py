@@ -28,14 +28,19 @@ class Data(object):
         "Return era as a 1d numpy str array"
         return self.df['era'].values.astype(str)
 
-    def era_isin(self, eras):
-        "Copy of data that contrain only the eras in the iterable `eras`"
-        idx = self.df.era.isin(eras)
-        return self[idx]
-
     def unique_era(self):
         "array of unique eras"
         return np.unique(self.era)
+
+    def era_isin(self, eras):
+        "Copy of data containing only eras in the iterable `eras`"
+        idx = self.df.era.isin(eras)
+        return self[idx]
+
+    def era_isnotin(self, eras):
+        "Copy of data containing eras that are not the iterable `eras`"
+        idx = self.df.era.isin(eras)
+        return self[~idx]
 
     # region ----------------------------------------------------------------
 
@@ -44,14 +49,19 @@ class Data(object):
         "Return region as a 1d numpy str array"
         return self.df['region'].values.astype(str)
 
-    def region_isin(self, regions):
-        "Copy of data that contrain only the regions in the iterable `regions`"
-        idx = self.df.region.isin(regions)
-        return self[idx]
-
     def unique_region(self):
         "array of unique regions"
         return np.unique(self.region)
+
+    def region_isin(self, regions):
+        "Copy of data containing only regions in the iterable `regions`"
+        idx = self.df.region.isin(regions)
+        return self[idx]
+
+    def region_isnotin(self, regions):
+        "Copy of data containing regions that are not the iterable `regions`"
+        idx = self.df.region.isin(regions)
+        return self[~idx]
 
     # x ---------------------------------------------------------------------
 
