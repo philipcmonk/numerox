@@ -1,5 +1,6 @@
 import os
 
+import numpy as np
 from nose.tools import ok_
 
 import numerox as nx
@@ -21,3 +22,20 @@ def test_data_copies():
     ok_(~shares_memory(d, d.region), "d.region should be a copy")
     ok_(~shares_memory(d, d.x), "d.x should be a copy")
     ok_(~shares_memory(d, d.y), "d.y should be a copy")
+
+
+def test_data_properties():
+    "data properties should not be corrupted"
+
+    d = nx.load(TEST_ARCHIVE)
+
+    ok_((d.ids == d.df.index).all(), "ids is corrupted")
+    ok_((d.era == d.df.era).all(), "era is corrupted")
+    ok_((d.region == d.df.region).all(), "region is corrupted")
+
+    idx = ~np.isnan(d.df.y)
+    ok_((d.y[idx] == d.df.y[idx]).all(), "y is corrupted")
+
+    x = d.x
+    for i, name in enumerate(d._x_names()):
+        ok_((x[:, i] == d.df[name]).all(), "%s is corrupted" % name)
