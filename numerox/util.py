@@ -1,6 +1,8 @@
 import numpy as np
 from sklearn.model_selection import KFold
 
+from numerox import Data
+
 
 def cv(data, kfold=5, random_state=None):
     "Cross validation iterator that yields train, test data across eras"
@@ -30,3 +32,17 @@ def row_sample(data, fraction=0.01, seed=0):
         bool_idx[idx] = 1
     frac_data = data[bool_idx]
     return frac_data
+
+
+def shares_memory(data1, data_or_array2):
+    "True if `data1` shares memory with `data_or_array2`; False otherwise"
+    isdata = isinstance(data_or_array2, Data)
+    for col in data1._column_list():
+        a1 = data1.df[col].values
+        if isdata:
+            a2 = data_or_array2.df[col].values
+        else:
+            a2 = data_or_array2
+        if np.shares_memory(a1, a2):
+            return True
+    return False

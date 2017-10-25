@@ -146,15 +146,8 @@ class Data(object):
         return self.df.equals(other_data.df)
 
     def __add__(self, other_data):
+        "concatenate two data objects"
         return concat([self, other_data])
-
-    def shares_memory(self, other_data):
-        for col in self._column_list():
-            a1 = self.df[col].values
-            a2 = other_data.df[col].values
-            if np.shares_memory(a1, a2):
-                return True
-        return False
 
     def __repr__(self):
 
