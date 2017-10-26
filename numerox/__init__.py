@@ -1,7 +1,7 @@
 # flake8: noqa
 
 from numerox.data import Data, load_data, load_zip, concat
-from numerox.util import cv, row_sample, shares_memory
+from numerox.util import cv, row_sample
 from numerox.prediction import Prediction, load_prediction
 from numerox.version import __version__
 

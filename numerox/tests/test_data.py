@@ -4,7 +4,7 @@ import numpy as np
 from nose.tools import ok_
 
 import numerox as nx
-from numerox.util import shares_memory
+from numerox.testing import shares_memory
 
 TEST_ARCHIVE = os.path.join(os.path.dirname(__file__), 'test_data.hdf')
 
