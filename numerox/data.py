@@ -213,7 +213,7 @@ def concat(datas):
     "Concatenate data objects; ids must not overlap; datas is an iterable"
     dfs = [d.df for d in datas]
     try:
-        df = pd.concat(dfs, verify_integrity=True)
+        df = pd.concat(dfs, verify_integrity=True, copy=True)
     except ValueError:
         # pandas doesn't raise expected IndexError and for our large data
         # object, the id overlaps that it prints can be very long so
