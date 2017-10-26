@@ -1,8 +1,17 @@
 # flake8: noqa
 
-from numerox.data import Data, load_data, load_zip, concat
+# classes
+from numerox.data import Data
+from numerox.prediction import Prediction
+
+# load
+from numerox.data import load_data, load_zip
+from numerox.testing import load_play_data
+from numerox.prediction import load_prediction
+
+# misc
+from numerox.data import concat
 from numerox.util import cv, row_sample
-from numerox.prediction import Prediction, load_prediction
 from numerox.version import __version__
 
 try:
