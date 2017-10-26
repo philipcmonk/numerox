@@ -6,7 +6,7 @@ HDF_PREDICTION_KEY = 'numerox_prediction'
 class Prediction(object):
 
     def __init__(self, df=None):
-        self.df = None
+        self.df = df
 
     def append(self, ids, y):
         df = pd.DataFrame(data={'y': y}, index=ids)
@@ -42,3 +42,9 @@ class Prediction(object):
         t.append(fmt.format('rows', len(self.df)))
         t.append(fmt.format('nulls', y.isnull().sum()))
         return '\n'.join(t)
+
+
+def load_prediction(file_path):
+    "Load prediction object from hdf archive; return Prediction"
+    df = pd.read_hdf(file_path, key=HDF_PREDICTION_KEY)
+    return Prediction(df)

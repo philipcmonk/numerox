@@ -190,15 +190,15 @@ class Data(object):
         return '\n'.join(t)
 
 
-def load_data(dataset_path):
-    "Load numerai dataset from hdf archive; return Data"
-    df = pd.read_hdf(dataset_path)
+def load_data(file_path):
+    "Load data object from hdf archive; return Data"
+    df = pd.read_hdf(file_path, key=HDF_DATA_KEY)
     return Data(df)
 
 
-def load_zip(dataset_path):
+def load_zip(file_path):
     "Load numerai dataset from zip archive; return Data"
-    zf = zipfile.ZipFile(dataset_path)
+    zf = zipfile.ZipFile(file_path)
     train = pd.read_csv(zf.open(TRAIN_FILE), header=0, index_col=0)
     tourn = pd.read_csv(zf.open(TOURNAMENT_FILE), header=0, index_col=0)
     df = pd.concat([train, tourn], axis=0)
