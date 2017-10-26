@@ -27,7 +27,7 @@ model)::
 Once you have a model numerox will do the rest::
 
     model = MyModel(C=1)
-    data = nx.load('numerai_dataset.hdf')
+    data = nx.load_data('numerai_dataset.hdf')
     # pick a random seed that equals hoped for USD prize money
     prediction = nx.backtest(model, data, kfold=5, seed=1000)
 
@@ -72,7 +72,7 @@ But that is slow (~7 seconds) which is painful for dedicated overfitters.
 Let's create an HDF5 archive::
 
     >>> data.save('numerai_dataset.hdf')
-    >>> data2 = nx.load('numerai_dataset.hdf')
+    >>> data2 = nx.load_data('numerai_dataset.hdf')
 
 That loads quickly (~0.2 seconds, but takes more disk space than the
 unexpanded zip archive).

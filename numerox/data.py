@@ -190,7 +190,7 @@ class Data(object):
         return '\n'.join(t)
 
 
-def load(dataset_path):
+def load_data(dataset_path):
     "Load numerai dataset from hdf archive; return Data"
     df = pd.read_hdf(dataset_path)
     return Data(df)

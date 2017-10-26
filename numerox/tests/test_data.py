@@ -12,7 +12,7 @@ TEST_ARCHIVE = os.path.join(os.path.dirname(__file__), 'test_data.hdf')
 def test_data_copies():
     "data properties should be copies"
 
-    d = nx.load(TEST_ARCHIVE)
+    d = nx.load_data(TEST_ARCHIVE)
 
     ok_(shares_memory(d, d), "looks like shares_memory failed")
     ok_(~shares_memory(d, d.copy()), "should be a copy")
@@ -27,7 +27,7 @@ def test_data_copies():
 def test_data_properties():
     "data properties should not be corrupted"
 
-    d = nx.load(TEST_ARCHIVE)
+    d = nx.load_data(TEST_ARCHIVE)
 
     ok_((d.ids == d.df.index).all(), "ids is corrupted")
     ok_((d.era == d.df.era).all(), "era is corrupted")
