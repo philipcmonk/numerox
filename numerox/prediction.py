@@ -1,5 +1,7 @@
 import pandas as pd
 
+from numerox import Data
+
 HDF_PREDICTION_KEY = 'numerox_prediction'
 
 
@@ -34,6 +36,15 @@ class Prediction(object):
                 # number of y, the id overlaps that it prints can be very long
                 raise IndexError("Overlap in ids found")
         self.df = df
+
+    def save_csv_submission(self, data, path_or_buf=None):
+        "Save a csv file of predictions for later upload to Numerai"
+        if not isinstance(data, Data):
+            raise ValueError('`data` must be a Data object')
+        data = data['tournament']
+        ids = data.ids
+        df = self.df.loc[ids]
+        return df.to_csv(path_or_buf)
 
     def save(self, path_or_buf, compress=True):
         "Save prediction as an hdf archive; raises if nothing to save"
