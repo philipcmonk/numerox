@@ -24,3 +24,9 @@ def shares_memory(data1, data_or_array2):
 
 def load_play_data():
     return nx.load_data(TEST_DATA)
+
+
+def update_play_data(numerai_zip_path):
+    data = nx.load_zip(numerai_zip_path)
+    play = nx.row_sample(data, fraction=0.01, seed=0)
+    play.save(TEST_DATA)

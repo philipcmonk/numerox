@@ -162,6 +162,18 @@ To make your overfitting modestly challenging use cross validation::
     428218 107495
     429265 106448
 
+Numerox comes with a small dataset to play with::
+
+    >>> nx.load_play_data()
+    region    live, test, train, validation
+    rows      8795
+    era       98, [era1, eraX]
+    x         50, min 0.0259, mean 0.4995, max 0.9913
+    y         mean 0.502646, fraction missing 0.3126
+
+It is about 1% of a regular Numerai dataset, so contains around 60 rows per
+era.
+
 Install
 =======
 
