@@ -18,7 +18,7 @@ class Data(object):
 
     @property
     def ids(self):
-        "Return ids as a numpy str array"
+        "Copy of ids as a numpy str array"
         return self.df.index.values.astype(str)
 
     # era -------------------------------------------------------------------
