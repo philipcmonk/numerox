@@ -182,17 +182,9 @@ class Data(object):
         t.append(fmt.format('x', stats))
 
         # y
-        y = self.y
-        idx = np.isnan(y)
-        frac = idx.mean()
-        idx = ~idx
-        if idx.sum() > 0:
-            mean = y[idx].mean()
-        else:
-            # avoid numpy warning "Mean of empty slice"
-            mean = np.nan
+        y = self.df.y
         stats = 'mean {:.6f}, fraction missing {:.4f}'
-        stats = stats.format(mean, frac)
+        stats = stats.format(y.mean(), y.isnull().mean())
         t.append(fmt.format('y', stats))
 
         return '\n'.join(t)
