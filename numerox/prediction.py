@@ -69,6 +69,10 @@ class Prediction(object):
             return 0
         return self.df.__len__()
 
+    def _column_list(self):
+        "Return column names of dataframe as a list"
+        return self.df.columns.values.tolist()
+
     def __repr__(self):
         if self.df is None:
             return ''
