@@ -191,13 +191,10 @@ failures)::
 Resources
 =========
 
-Questions, comments, suggests, money: Numerai's slack channel and on github:
-https://github.com/kwgoodman/numerox.
-
-If you know of a company that might benefit from this package, then please
-encourage them to fund the development (me) of numerox.
+Questions, comments, suggests: Numerai's slack channel and on github:
+https://github.com/kwgoodman/numerox/issues.
 
 License
 =======
 
-Numerox is distributed under the GPL v3+. See the LICENSE file for details.
+Numerox is distributed under the Simplified BSD. See LICENSE file for details.
