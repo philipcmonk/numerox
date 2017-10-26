@@ -1,18 +1,13 @@
 from sklearn.linear_model import LogisticRegression
 
 
-class LogReg(object):  # must have fit and predict methods
+class LogRegModel(object):  # must have fit_predict method
 
-    def __init__(self, C):  # use whatever input parameters you need
+    def __init__(self, C):  # add whatever inputs you need
         self.C = C
-        self.model = None
 
-    def fit(self, data):  # data must be the only input parameter
-        self.model = LogisticRegression(C=self.C)
-        self.model.fit(data.x, data.y)
-
-    def predict(self, data):  # data must be the only input parameter
-        if self.model is None:
-            raise ValueError("model has not been fit")
-        yhat = self.model.predict_prob(data.x)[:, 1]
-        return data.ids, yhat
+    def fit_predict(self, data_train, data_predict):  # must take two datas
+        model = LogisticRegression(C=self.C)
+        model.fit(data_train.x, data_train.y)
+        yhat = model.predict_prob(data_predict.x)[:, 1]
+        return data_predict.ids, yhat  # must return ids, y arrays
