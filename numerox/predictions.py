@@ -4,13 +4,13 @@ import glob
 import pandas as pd
 
 
-class Report(object):
+class Predictions(object):
 
     def __init__(self, df=None):
         self.df = df
 
 
-def load_report(prediction_dir, extension='.pred'):
+def load_predictions(prediction_dir, extension='.pred'):
     "Load Prediction objects (hdf) in `prediction_dir`; return Report object"
     original_dir = os.getcwd()
     os.chdir(prediction_dir)
@@ -25,4 +25,4 @@ def load_report(prediction_dir, extension='.pred'):
     finally:
         os.chdir(original_dir)
     df = pd.concat(dfs, axis=1, verify_integrity=True, copy=False)
-    return Report(df)
+    return Predictions(df)

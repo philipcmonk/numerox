@@ -3,12 +3,12 @@
 # classes
 from numerox.data import Data
 from numerox.prediction import Prediction
-from numerox.report import Report
+from numerox.predictions import Predictions
 
 # load
 from numerox.data import load_data, load_zip
 from numerox.testing import load_play_data
-from numerox.report import load_report
+from numerox.predictions import load_predictions
 
 # misc
 from numerox.data import concat
