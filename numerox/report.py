@@ -3,8 +3,6 @@ import glob
 
 import pandas as pd
 
-from numerox.prediction import load_prediction
-
 
 class Report(object):
 
@@ -19,7 +17,7 @@ def load_report(prediction_dir, extension='.pred'):
     dfs = []
     try:
         for filename in glob.glob("*{}".format(extension)):
-            prediction = load_prediction(filename)
+            prediction = None  # load_prediction(filename)
             df = prediction.df
             model = filename[:-len(extension)]
             df.rename(columns={'y': model}, inplace=True)
