@@ -37,7 +37,7 @@ class Prediction(object):
                 raise IndexError("Overlap in ids found")
         self.df = df
 
-    def save_csv_submission(self, data, path_or_buf=None):
+    def to_csv(self, data, path_or_buf=None):
         "Save a csv file of predictions for later upload to Numerai"
         if not isinstance(data, Data):
             raise ValueError('`data` must be a Data object')

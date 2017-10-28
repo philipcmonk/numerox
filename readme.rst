@@ -6,6 +6,8 @@ Numerox is a Numerai machine learning competition toolbox written in Python.
 All you have to do is create a model. (Look away while I type my prize-winning
 model)::
 
+    from sklearn.linear_model import LogisticRegression
+
     class LogRegModel(object):  # must have fit_predict method
 
         def __init__(self, C):  # add whatever inputs you need
@@ -13,7 +15,6 @@ model)::
 
         # must take two datas (train, predict) and return ids, y arrays
         def fit_predict(self, data_train, data_predict):
-            from sklearn.linear_model import LogisticRegression
             model = LogisticRegression(C=self.C)
             model.fit(data_train.x, data_train.y)
             yhat = model.predict_prob(data_predict.x)[:, 1]
@@ -23,8 +24,7 @@ Once you have a model numerox will do the rest::
 
     model = MyModel(C=1)
     data = nx.load_data('numerai_dataset.hdf')
-    # pick a random seed that equals hoped for USD prize money
-    prediction = nx.backtest(model, data, kfold=5, seed=1000)
+    prediction = nx.backtest(model, data, kfold=5, seed=0)
 
 After each fold you'll see a cumulative report::
 
@@ -38,9 +38,8 @@ After each fold you'll see a cumulative report::
 What the hell, looks good enough. Let's make a submission file for the
 tournament::
 
-    # It is very bad luck to pick a random seed that equals hoped for prize
-    prediction = nx.production(model, data, seed=0)
-    prediction.to_csv('mymodel.csv')
+    prediction = nx.production(model, data)
+    prediction.to_csv('logreg.csv')
 
 I lied
 ======
