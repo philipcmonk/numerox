@@ -12,6 +12,9 @@ from numerox.prediction import load_prediction
 from numerox.report import load_report
 
 # splitters
+from numerox.splitter import tournament_splitter
+from numerox.splitter import validation_splitter
+from numerox.splitter import split_splitter
 from numerox.splitter import cv_splitter
 
 # misc
