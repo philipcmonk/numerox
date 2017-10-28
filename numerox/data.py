@@ -114,7 +114,7 @@ class Data(object):
 
     def _column_list(self):
         "Return column names of dataframe as a list"
-        return self.df.columns.values.tolist()
+        return self.df.columns.tolist()
 
     @property
     def size(self):
