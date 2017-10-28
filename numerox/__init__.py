@@ -11,9 +11,12 @@ from numerox.testing import load_play_data
 from numerox.prediction import load_prediction
 from numerox.report import load_report
 
+# splitters
+from numerox.splitter import cv_splitter
+
 # misc
 from numerox.data import concat
-from numerox.util import cv, row_sample
+from numerox.util import row_sample
 from numerox.version import __version__
 
 try:
