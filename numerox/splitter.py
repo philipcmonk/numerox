@@ -1,6 +1,16 @@
 from sklearn.model_selection import KFold
 
 
+def tournament_splitter(data):
+    "The iterator give a single split between train and tournament data"
+    yield data['train'], data['tournament']
+
+
+def validation_splitter(data):
+    "The iterator give a siggnle split between train and validation data"
+    yield data['train'], data['validation']
+
+
 def cv_splitter(data, kfold=5, seed=0):
     "Cross validation iterator that yields train, test data across eras"
     kf = KFold(n_splits=kfold, shuffle=True, random_state=seed)
