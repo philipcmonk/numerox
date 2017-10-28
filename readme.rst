@@ -39,7 +39,7 @@ What the hell, looks good enough. Let's make a submission file for the
 tournament::
 
     prediction = nx.production(model, data)
-    prediction.to_csv('logreg.csv')
+    prediction.to_csv('logreg.csv')  # saves 6 decimals places by default
 
 I lied
 ======

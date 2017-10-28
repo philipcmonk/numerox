@@ -1,7 +1,5 @@
 import pandas as pd
 
-from numerox import Data
-
 HDF_PREDICTION_KEY = 'numerox_prediction'
 
 
@@ -37,14 +35,10 @@ class Prediction(object):
                 raise IndexError("Overlap in ids found")
         self.df = df
 
-    def to_csv(self, data, path_or_buf=None):
+    def to_csv(self, path_or_buf=None, decimals=6):
         "Save a csv file of predictions for later upload to Numerai"
-        if not isinstance(data, Data):
-            raise ValueError('`data` must be a Data object')
-        data = data['tournament']
-        ids = data.ids
-        df = self.df.loc[ids]
-        return df.to_csv(path_or_buf)
+        float_format = "%.{}f".format(decimals)
+        return self.df.to_csv(path_or_buf, float_format=float_format)
 
     def save(self, path_or_buf, compress=True):
         "Save prediction as an hdf archive; raises if nothing to save"
