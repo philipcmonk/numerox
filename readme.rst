@@ -24,8 +24,7 @@ Once you have a model numerox will do the rest::
 
     >>> model = MyModel(C=1)
     >>> data = nx.load_data('numerai_dataset.hdf')
-    >>> prediction = nx.backtest(model, data['train'], kfold=5, seed=0)
-        # cummulative performance of the first 4 folds cut for brevity
+    >>> prediction = nx.backtest(model, data['train'], kfold=5, seed=0, verbosity=1)
           logloss   auc     acc     ystd
     mean  0.692770  0.5197  0.5137  0.0281  |  region   train
     std   0.003196  0.0314  0.0231  0.0019  |  eras     85

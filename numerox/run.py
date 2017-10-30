@@ -19,7 +19,7 @@ def production(model, data):
     return prediction
 
 
-def backtest(model, data, kfold=5, seed=0):
+def backtest(model, data, kfold=5, seed=0, verbosity=2):
     splitter = cv_splitter(data, kfold=kfold, seed=seed)
-    prediction = run(model, data, splitter)
+    prediction = run(model, data, splitter, verbosity)
     return prediction
