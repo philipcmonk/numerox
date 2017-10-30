@@ -1,4 +1,7 @@
 import pandas as pd
+import numpy as np
+
+from sklearn.metrics import log_loss, roc_auc_score, accuracy_score
 
 HDF_PREDICTION_KEY = 'numerox_prediction'
 
@@ -16,14 +19,14 @@ class Prediction(object):
         return self.df.index.values.astype(str)
 
     @property
-    def y(self):
-        "Copy of y as a 1d numpy array or None is empty"
+    def yhat(self):
+        "Copy of yhat as a 1d numpy array or None is empty"
         if self.df is None:
             return None
-        return self.df['y'].values.copy()
+        return self.df['yhat'].values.copy()
 
-    def append(self, ids, y):
-        df = pd.DataFrame(data={'y': y}, index=ids)
+    def append(self, ids, yhat):
+        df = pd.DataFrame(data={'yhat': yhat}, index=ids)
         if self.df is None:
             df.index.rename('ids', inplace=True)
         else:
@@ -49,6 +52,49 @@ class Prediction(object):
                            complib='zlib', complevel=4)
         else:
             self.df.to_hdf(path_or_buf, HDF_PREDICTION_KEY)
+
+    def performance(self, data):
+
+        # merge prediction with data (remove features x)
+        yhat_df = self.df.dropna()
+        data_df = data.df[['era', 'region', 'y']]
+        df = pd.merge(data_df, yhat_df, left_index=True, right_index=True,
+                      how='inner')
+
+        # separate performance for each region
+        regions = ['train', 'validation']
+        for region in regions:
+
+            # pull out region
+            idx = df.region.isin([region])
+            df_region = df[idx]
+            if len(df_region) == 0:
+                continue
+
+            # calc metrics for each era
+            eras = df_region.era.unique()
+            metrics = []
+            for era in eras:
+                idx = df_region.era.isin([era])
+                df_era = df_region[idx]
+                arr = df_era[['y', 'yhat']].values
+                m = calc_metrics(arr)
+                metrics.append(m)
+            metrics = np.array(metrics)
+
+            # display performance
+            print("      logloss   auc     acc     ystd")
+            fmt = "{:<4}  {:.6f}  {:.4f}  {:.4f}  {:.4f}{extra}"
+            extra = "  |  {:<7}  {:<}".format('region', region)
+            print(fmt.format('mean', *metrics.mean(axis=0), extra=extra))
+            extra = "  |  {:<7}  {:<}".format('eras', metrics.shape[0])
+            print(fmt.format('std', *metrics.std(axis=0), extra=extra))
+            consistency = (metrics[:, 0] < np.log(2)).mean()
+            extra = "  |  {:<7}  {:<.4f}".format('consis', consistency)
+            print(fmt.format('min', *metrics.min(axis=0), extra=extra))
+            prctile = np.percentile(metrics[:, 0], 75)
+            extra = "  |  {:<7}  {:<.4f}".format('75th', prctile)
+            print(fmt.format('max', *metrics.max(axis=0), extra=extra))
 
     def copy(self):
         "Copy of prediction"
@@ -97,3 +143,26 @@ def load_prediction(file_path):
     "Load prediction object from hdf archive; return Prediction"
     df = pd.read_hdf(file_path, key=HDF_PREDICTION_KEY)
     return Prediction(df)
+
+
+def calc_metrics(arr):
+    y = arr[:, 0]
+    yhat = arr[:, 1]
+    m = []
+    m.append(log_loss(y, yhat))
+    m.append(roc_auc_score(y, yhat))
+    yh = np.zeros(yhat.size)
+    yh[yhat >= 0.5] = 1
+    m.append(accuracy_score(y, yh))
+    m.append(yhat.std())
+    return m
+
+
+if __name__ == '__main__':
+    # test prediction.performance()
+    import numerox as nx
+    from numerox.examples import LogRegModel
+    data = nx.load_data('/data/ni/numerai_dataset_20171024.hdf')
+    model = LogRegModel(C=0.001)
+    prediction = nx.production(model, data)
+    prediction.performance(data)

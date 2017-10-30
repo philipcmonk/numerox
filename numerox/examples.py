@@ -10,5 +10,5 @@ class LogRegModel(object):  # must have fit_predict method
     def fit_predict(self, data_fit, data_predict):
         model = LogisticRegression(C=self.C)
         model.fit(data_fit.x, data_fit.y)
-        yhat = model.predict_prob(data_predict.x)[:, 1]
+        yhat = model.predict_proba(data_predict.x)[:, 1]
         return data_predict.ids, yhat

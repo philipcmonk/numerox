@@ -17,6 +17,11 @@ from numerox.splitter import validation_splitter
 from numerox.splitter import split_splitter
 from numerox.splitter import cv_splitter
 
+# run
+from numerox.run import run
+from numerox.run import production
+from numerox.run import backtest
+
 # misc
 from numerox.data import concat
 from numerox.util import row_sample
