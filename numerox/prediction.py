@@ -163,6 +163,5 @@ if __name__ == '__main__':
     import numerox as nx
     from numerox.examples import LogRegModel
     data = nx.load_data('/data/ni/numerai_dataset_20171024.hdf')
-    model = LogRegModel(C=0.001)
-    prediction = nx.production(model, data)
-    prediction.performance(data)
+    model = LogRegModel(C=1)
+    prediction = nx.backtest(model, data['train'])

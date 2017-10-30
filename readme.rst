@@ -22,31 +22,33 @@ model)::
 
 Once you have a model numerox will do the rest::
 
-    model = MyModel(C=1)
-    data = nx.load_data('numerai_dataset.hdf')
-    prediction = nx.backtest(model, data, kfold=5, seed=0)
-
-After each fold you'll see a cumulative report::
-
-    logloss    85  acc     auc     ymean   ystd    ymax   num    minutes
-    0.692463  mea  0.5153  0.5219  0.5000  0.0130  0.039  6303   0.03
-    0.001428  std  0.0232  0.0314  0.0000  0.0000  0.001   236   0.00
-    0.689814  min  0.4652  0.4505  0.5000  0.0130  0.038  5927   0.03
-    0.695774  max  0.5574  0.5809  0.5000  0.0130  0.040  6793   0.03
-              con  0.7059  75 pct  0.69333 sharpe  0.479
+    >>> model = MyModel(C=1)
+    >>> data = nx.load_data('numerai_dataset.hdf')
+    >>> prediction = nx.backtest(model, data['train'], kfold=5, seed=0)
+        # cummulative performance of the first 4 folds cut for brevity
+          logloss   auc     acc     ystd
+    mean  0.692770  0.5197  0.5137  0.0281  |  region   train
+    std   0.003196  0.0314  0.0231  0.0019  |  eras     85
+    min   0.683797  0.4435  0.4545  0.0252  |  consis   0.5176
+    max   0.701194  0.6027  0.5751  0.0316  |  75th     0.6944
 
 What the hell, looks good enough. Let's make a submission file for the
-tournament::
+tournament (we will fail to pass the consistency threshold)::
 
-    prediction = nx.production(model, data)
-    prediction.to_csv('logreg.csv')  # saves 6 decimal places by default
+    >>> prediction = nx.production(model, data)
+          logloss   auc     acc     ystd
+    mean  0.692473  0.5212  0.5149  0.0270  |  region   validation
+    std   0.002360  0.0250  0.0175  0.0004  |  eras     12
+    min   0.687518  0.4926  0.4954  0.0262  |  consis   0.5000
+    max   0.695493  0.5754  0.5555  0.0274  |  75th     0.6940
+    >>> prediction.to_csv('logreg.csv')  # saves 6 decimal places by default
 
-I lied
-======
+Warning
+=======
 
-The examples above are merely my plan for numerox. This preview release only
-includes the Data class and has minimal unit tests coverage (yikes!). The
-examples below work.
+This preview release has minimal unit tests coverage (yikes!). In the next
+release I will vengefully break any code you write using numerox---the api
+is not yet stable.
 
 Data class
 ==========
