@@ -65,14 +65,14 @@ Both the ``production`` and ``backtest`` functions are just very thin wrappers
 around the ``run`` function::
 
     >>> prediction = nx.run(model, data, splitter, verbosity=2)
-    
+
 where ``splitter`` iterates through fit, predict splits of the data. Numerox
 comes with four splitters:
 
-    - tournament_splitter: data['train'], data['tournament'] (production)
-    - validation_splitter: data['train'], data['validation']
-    - cv_splitter: k-fold CV across eras (backtest)
-    - split_splitter: single split with specified fraction of data for fitting 
+- tournament_splitter: data['train'], data['tournament'] (production)
+- validation_splitter: data['train'], data['validation']
+- cv_splitter: k-fold CV across eras (backtest)
+- split_splitter: single split with specified fraction of data for fitting
 
 Warning
 =======
@@ -80,7 +80,7 @@ Warning
 This preview release has minimal unit tests coverage (yikes!) and the code
 has seen little use. The next release will likely break any code you write
 using numerox---the api is not yet stable. Please report any bugs or such
-to https://github.com/kwgoodman/numerox/issues. 
+to https://github.com/kwgoodman/numerox/issues.
 
 Data class
 ==========
