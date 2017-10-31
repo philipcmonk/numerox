@@ -33,9 +33,17 @@ def update_play_data(numerai_zip_path):
     play.save(TEST_DATA)
 
 
-def assert_data_equal(data1, data2):
+def assert_data_equal(data1, data2, msg=None):
     "Assert that two data objects are equal"
-    pd.testing.assert_frame_equal(data1.df, data2.df)
+    try:
+        pd.testing.assert_frame_equal(data1.df, data2.df)
+    except AssertionError as e:
+        # pd.testing.assert_frame_equal doesn't take an error message as input
+        # so let's hack our own
+        if msg is not None:
+            msg = '\n\n' + msg + '\n\n' + e.args[0]
+            e.args = (msg,)
+        raise
 
 
 def micro_data(index=None, nfeatures=3):
