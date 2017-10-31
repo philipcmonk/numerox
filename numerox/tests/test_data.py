@@ -1,31 +1,7 @@
 import numpy as np
 from nose.tools import ok_
 
-import pandas as pd
-
-from numerox.data import Data
-from numerox.testing import load_play_data, shares_memory
-
-
-def micro_data(index=None, nfeatures=3):
-    cols = ['era', 'region']
-    cols += ['x' + str(i) for i in range(1, nfeatures + 1)]
-    cols += ['y']
-    df = pd.DataFrame(columns=cols)
-    df.loc['index0'] = ['era1', 'train'] + [0.0] * nfeatures + [0.]
-    df.loc['index1'] = ['era2', 'train'] + [0.1] * nfeatures + [1.]
-    df.loc['index2'] = ['era2', 'train'] + [0.2] * nfeatures + [0.]
-    df.loc['index3'] = ['era3', 'valuation'] + [0.3] * nfeatures + [1.]
-    df.loc['index4'] = ['era3', 'valuation'] + [0.4] * nfeatures + [0.]
-    df.loc['index5'] = ['era3', 'valuation'] + [0.5] * nfeatures + [1.]
-    df.loc['index6'] = ['era4', 'valuation'] + [0.6] * nfeatures + [0.]
-    df.loc['index7'] = ['eraX', 'test'] + [0.7] * nfeatures + [1.]
-    df.loc['index8'] = ['eraX', 'test'] + [0.8] * nfeatures + [0.]
-    df.loc['index9'] = ['eraX', 'live'] + [0.9] * nfeatures + [1.]
-    if index is not None:
-        df = df.iloc[index]
-    data = Data(df)
-    return data
+from numerox.testing import load_play_data, shares_memory, micro_data
 
 
 def test_empty_data():
