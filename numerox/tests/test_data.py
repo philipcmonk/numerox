@@ -28,6 +28,24 @@ def micro_data(index=None, nfeatures=3):
     return data
 
 
+def test_empty_data():
+    "test empty data"
+    d = micro_data()
+    d['eraXXX']
+    d['eraYYY'].__repr__()
+    idx = np.zeros(len(d), dtype=np.bool)
+    d0 = d[idx]
+    ok_(len(d0) == 0, "empty data should have length 0")
+    ok_(d0.size == 0, "empty data should have size 0")
+    ok_(d0.shape[0] == 0, "empty data should have d.shape[0] == 0")
+    ok_(d0.era.size == 0, "empty data should have d.era.size == 0")
+    ok_(d0.region.size == 0, "empty data should have d.region.size == 0")
+    ok_(d0.x.size == 0, "empty data should have d.x.size == 0")
+    ok_(d0.y.size == 0, "empty data should have d.y.size == 0")
+    d2 = d['era0'] + d[idx]
+    ok_(len(d2) == 0, "empty data should have length 0")
+
+
 def test_data_copies():
     "data properties should be copies"
 

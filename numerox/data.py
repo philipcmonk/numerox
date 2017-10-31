@@ -159,6 +159,9 @@ class Data(object):
 
     def __repr__(self):
 
+        if self.__len__() == 0:
+            return ''
+
         t = []
         fmt = '{:<10}{:<}'
 
