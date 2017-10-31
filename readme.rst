@@ -22,8 +22,15 @@ model)::
 
 Once you have a model numerox will do the rest::
 
-    >>> model = MyModel(C=1)
-    >>> data = nx.load_data('numerai_dataset.hdf')
+    >>> import numerox as nx
+    >>> model = nx.LogRegModel(C=1)
+    >>> data = nx.load_zip('numerai_dataset.zip')
+    >>> data
+    region    live, test, train, validation
+    rows      884544
+    era       98, [era1, eraX]
+    x         50, min 0.0000, mean 0.4993, max 1.0000
+    y         mean 0.499961, fraction missing 0.3109
     >>> prediction = nx.backtest(model, data['train'], kfold=5, seed=0, verbosity=1)
           logloss   auc     acc     ystd
     mean  0.692770  0.5197  0.5137  0.0281  |  region   train
@@ -31,23 +38,49 @@ Once you have a model numerox will do the rest::
     min   0.683797  0.4435  0.4545  0.0252  |  consis   0.5176
     max   0.701194  0.6027  0.5751  0.0316  |  75th     0.6944
 
-What the hell, looks good enough. Let's make a submission file for the
-tournament (we will fail to pass the consistency threshold)::
+We are getting a consistency (fraction of eras with logloss less than ln(2))
+of around 52% on the training data. That is way below the 75% consistency
+required by Numerai on the validation data. So let's adjust the model's single
+parameter C, the inverse of regularization::
+
+    >>> model = nx.LogRegModel(C=0.00001)
+    >>> prediction = nx.backtest(model, data['train'], verbosity=1)
+          logloss   auc     acc     ystd
+    mean  0.692974  0.5226  0.5159  0.0023  |  region   train
+    std   0.000224  0.0272  0.0205  0.0002  |  eras     85
+    min   0.692360  0.4550  0.4660  0.0020  |  consis   0.7647
+    max   0.693589  0.5875  0.5606  0.0027  |  75th     0.6931
+
+Let's make a submission file for the tournament::
 
     >>> prediction = nx.production(model, data)
           logloss   auc     acc     ystd
-    mean  0.692473  0.5212  0.5149  0.0270  |  region   validation
-    std   0.002360  0.0250  0.0175  0.0004  |  eras     12
-    min   0.687518  0.4926  0.4954  0.0262  |  consis   0.5000
-    max   0.695493  0.5754  0.5555  0.0274  |  75th     0.6940
+    mean  0.692993  0.5157  0.5115  0.0028  |  region   validation
+    std   0.000225  0.0224  0.0172  0.0000  |  eras     12
+    min   0.692440  0.4853  0.4886  0.0028  |  consis   0.7500
+    max   0.693330  0.5734  0.5555  0.0028  |  75th     0.6931
     >>> prediction.to_csv('logreg.csv')  # saves 6 decimal places by default
+
+Both the ``production`` and ``backtest`` functions are just very thin wrappers
+around the ``run`` function::
+
+    >>> prediction = nx.run(model, data, splitter, verbosity=2)
+    
+where ``splitter`` iterates through fit, predict splits of the data. Numerox
+comes with four splitters::
+
+    - tournament_splitter: data['train'], data['tournament'] (production)
+    - validation_splitter: data['train'], data['validation']
+    - cv_splitter: k-fold CV across eras (backtest)
+    - split_splitter: single split with specified fraction of data for fitting 
 
 Warning
 =======
 
-This preview release has minimal unit tests coverage (yikes!). In the next
-release I will vengefully break any code you write using numerox---the api
-is not yet stable.
+This preview release has minimal unit tests coverage (yikes!) and the code
+has seen little use. The next release will likely break any code you write
+using numerox---the api is not yet stable. Please report any bugs or such
+to https://github.com/kwgoodman/numerox/issues. 
 
 Data class
 ==========
@@ -145,17 +178,6 @@ Or, let's go crazy::
 
 You can pull out numpy arrays (copies, not views) like so ``data.ids``,
 ``data.era``, ``data.region``, ``data.x``, ``data.y``.
-
-To make your overfitting modestly challenging use cross validation::
-
-    >>> for dtrain, dtest in nx.cv(data['train'], kfold=5, random_state=0):
-       ...:     print len(dtrain), len(dtest)
-       ...:
-    428333 107380
-    428841 106872
-    428195 107518
-    428218 107495
-    429265 106448
 
 Numerox comes with a small dataset to play with::
 

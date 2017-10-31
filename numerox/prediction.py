@@ -161,7 +161,7 @@ def calc_metrics(arr):
 if __name__ == '__main__':
     # test prediction.performance()
     import numerox as nx
-    from numerox.examples import LogRegModel
-    data = nx.load_data('/data/ni/numerai_dataset_20171024.hdf')
-    model = LogRegModel(C=1)
+    data = nx.load_data('/data/nx/numerai_dataset_20171024.hdf')
+    model = nx.LogRegModel(C=0.00001)
     prediction = nx.backtest(model, data['train'], verbosity=1)
+    prediction = nx.production(model, data)

@@ -4,6 +4,7 @@
 from numerox.data import Data
 from numerox.prediction import Prediction
 from numerox.report import Report
+from numerox.examples import LogRegModel
 
 # load
 from numerox.data import load_data, load_zip
