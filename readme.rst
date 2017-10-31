@@ -69,10 +69,10 @@ around the ``run`` function::
 where ``splitter`` iterates through fit, predict splits of the data. Numerox
 comes with four splitters:
 
-- tournament_splitter: data['train'], data['tournament'] (production)
-- validation_splitter: data['train'], data['validation']
-- cv_splitter: k-fold CV across eras (backtest)
-- split_splitter: single split with specified fraction of data for fitting
+- **tournament_splitter** data['train'], data['tournament'] (production)
+- **validation_splitter** data['train'], data['validation']
+- **cv_splitter** k-fold CV across eras (backtest)
+- **split_splitter** single split with specified fraction of data for fitting
 
 Warning
 =======
