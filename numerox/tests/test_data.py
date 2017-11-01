@@ -2,6 +2,30 @@ import numpy as np
 from nose.tools import ok_
 
 from numerox.testing import load_play_data, shares_memory, micro_data
+from numerox.testing import assert_data_equal as ade
+
+
+def test_data_indexing():
+    "test data indexing"
+
+    d = micro_data()
+
+    msg = 'error indexing data by era'
+    ade(d['era1'], micro_data([0]), msg)
+    ade(d['era2'], micro_data([1, 2]), msg)
+    ade(d['era3'], micro_data([3, 4, 5]), msg)
+    ade(d['era4'], micro_data([6]), msg)
+    ade(d['eraX'], micro_data([7, 8, 9]), msg)
+
+    msg = 'error indexing data by region'
+    ade(d['train'], micro_data([0, 1, 2]), msg)
+    ade(d['validation'], micro_data([3, 4, 5, 6]), msg)
+    ade(d['test'], micro_data([7, 8]), msg)
+    ade(d['live'], micro_data([9]), msg)
+
+    msg = 'error indexing data by array'
+    ade(d[d.y == 0], micro_data([0, 2, 4, 6, 8]), msg)
+    ade(d[d.era == 'era4'], micro_data([6]), msg)
 
 
 def test_empty_data():
