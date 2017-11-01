@@ -32,3 +32,19 @@ class extratrees(object):
         clf.fit(data_fit.x, data_fit.y)
         yhat = clf.predict_proba(data_predict.x)[:, 1]
         return data_predict.ids, yhat
+
+
+class combo(object):
+
+    def __init__(self):
+        self.models = [logistic(), extratrees()]
+
+    def fit_predict(self, data_fit, data_predict):
+        yhat = 0
+        for model in self.models:
+            ids, yh = model.fit_predict(data_fit, data_predict)
+            if (data_predict.ids != ids).any():
+                raise IndexError("Hey! This is just a simple demo, ok?")
+            yhat += yh
+        yhat /= len(self.models)
+        return data_predict.ids, yhat
