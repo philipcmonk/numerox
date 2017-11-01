@@ -2,9 +2,9 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import ExtraTreesClassifier as ETC
 
 
-class LogRegModel(object):  # must have fit_predict method
+class logistic(object):  # must have fit_predict method
 
-    def __init__(self, C):  # add whatever inputs you need
+    def __init__(self, C=0.00001):  # add whatever inputs you need
         self.C = C
 
     # must take two datas (fit, predict) and return (ids, yhat) arrays
@@ -15,7 +15,7 @@ class LogRegModel(object):  # must have fit_predict method
         return data_predict.ids, yhat
 
 
-class ExtraTreesModel(object):
+class extratrees(object):
 
     def __init__(self, ntrees=100, depth=3, nfeatures=7, seed=0):
         self.ntrees = ntrees

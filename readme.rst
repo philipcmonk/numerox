@@ -8,9 +8,9 @@ model)::
 
     from sklearn.linear_model import LogisticRegression
 
-    class LogRegModel(object):  # must have fit_predict method
+    class logistic(object):  # must have fit_predict method
 
-        def __init__(self, C):  # add whatever inputs you need
+        def __init__(self, C=0.00001):  # add whatever inputs you need
             self.C = C
 
         # must take two datas (fit, predict) and return (ids, yhat) arrays
@@ -21,7 +21,7 @@ model)::
             return data_predict.ids, yhat
 
 Once you have a model numerox will do the rest. First download the Numerai
-dataset and then load it (there is no need to unzip the archive)::
+dataset and then load it (there is no need to unzip it)::
 
     >>> import numerox as nx
     >>> nx.download_dataset('numerai_dataset.zip')
@@ -35,20 +35,7 @@ dataset and then load it (there is no need to unzip the archive)::
 
 Next, run 5-fold cross validation on the training data::
 
-    >>> model = nx.LogRegModel(C=1)
-    >>> prediction = nx.backtest(model, data['train'], kfold=5, seed=0, verbosity=1)
-          logloss   auc     acc     ystd
-    mean  0.692770  0.5197  0.5137  0.0281  |  region   train
-    std   0.003196  0.0314  0.0231  0.0019  |  eras     85
-    min   0.683797  0.4435  0.4545  0.0252  |  consis   0.5176
-    max   0.701194  0.6027  0.5751  0.0316  |  75th     0.6944
-
-We are getting a consistency (fraction of eras with logloss less than ln(2))
-of around 52% on the training data. That is way below the 75% consistency
-required by Numerai on the validation data. So let's adjust the model's single
-parameter C, the inverse of L2 regularization::
-
-    >>> model = nx.LogRegModel(C=0.00001)
+    >>> model = nx.model.logistic()
     >>> prediction = nx.backtest(model, data['train'], verbosity=1)
           logloss   auc     acc     ystd
     mean  0.692974  0.5226  0.5159  0.0023  |  region   train
@@ -65,7 +52,7 @@ tournament::
     std   0.000225  0.0224  0.0172  0.0000  |  eras     12
     min   0.692440  0.4853  0.4886  0.0028  |  consis   0.7500
     max   0.693330  0.5734  0.5555  0.0028  |  75th     0.6931
-    >>> prediction.to_csv('logreg.csv')  # saves 6 decimal places by default
+    >>> prediction.to_csv('logistic.csv')  # saves 6 decimal places by default
 
 Both the ``production`` and ``backtest`` functions are just very thin wrappers
 around the ``run`` function::
@@ -75,10 +62,10 @@ around the ``run`` function::
 where ``splitter`` iterates through fit, predict splits of the data. Numerox
 comes with four splitters:
 
-- **tournament_splitter** data['train'], data['tournament'] (production)
-- **validation_splitter** data['train'], data['validation']
-- **cv_splitter** k-fold CV across eras (backtest)
-- **split_splitter** single split with specified fraction of data for fitting
+- ``tournament_splitter`` data['train'], data['tournament'] (production)
+- ``validation_splitter`` data['train'], data['validation']
+- ``cv_splitter`` k-fold CV across eras (backtest)
+- ``split_splitter`` single split with specified fraction of data for fitting
 
 Warning
 =======
