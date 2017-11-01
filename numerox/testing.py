@@ -8,6 +8,18 @@ import numerox as nx
 TEST_DATA = os.path.join(os.path.dirname(__file__), 'tests', 'test_data.hdf')
 
 
+def assert_data_equal(data1, data2, msg=None):
+    "Assert that two data objects are equal"
+    try:
+        pd.testing.assert_frame_equal(data1.df, data2.df)
+    except AssertionError as e:
+        # pd.testing.assert_frame_equal doesn't take an error message as input
+        if msg is not None:
+            msg = '\n\n' + msg + '\n\n' + e.args[0]
+            e.args = (msg,)
+        raise
+
+
 def shares_memory(data1, data_or_array2):
     "True if `data1` shares memory with `data_or_array2`; False otherwise"
     isdata_like = isinstance(data_or_array2, nx.Data)
@@ -21,29 +33,6 @@ def shares_memory(data1, data_or_array2):
         if np.shares_memory(a1, a2):
             return True
     return False
-
-
-def load_play_data():
-    return nx.load_data(TEST_DATA)
-
-
-def update_play_data(numerai_zip_path):
-    data = nx.load_zip(numerai_zip_path)
-    play = nx.row_sample(data, fraction=0.01, seed=0)
-    play.save(TEST_DATA)
-
-
-def assert_data_equal(data1, data2, msg=None):
-    "Assert that two data objects are equal"
-    try:
-        pd.testing.assert_frame_equal(data1.df, data2.df)
-    except AssertionError as e:
-        # pd.testing.assert_frame_equal doesn't take an error message as input
-        # so let's hack our own
-        if msg is not None:
-            msg = '\n\n' + msg + '\n\n' + e.args[0]
-            e.args = (msg,)
-        raise
 
 
 def micro_data(index=None, nfeatures=3):
@@ -66,3 +55,33 @@ def micro_data(index=None, nfeatures=3):
         df = df.iloc[index]
     data = nx.Data(df)
     return data
+
+
+def load_play_data():
+    "About 1% of a regular Numerai dataset, so contains around 60 rows per era"
+    return nx.load_data(TEST_DATA)
+
+
+def update_play_data(numerai_zip_path):
+    "Create and save data used by load_play_data function"
+    data = nx.load_zip(numerai_zip_path)
+    play = row_sample(data, fraction=0.01, seed=0)
+    play.save(TEST_DATA)
+
+
+def row_sample(data, fraction=0.01, seed=0):
+    "Randomly sample `fraction` of each era's rows; y is likely unbalanced"
+    rs = np.random.RandomState(seed)
+    era = data.era
+    bool_idx = np.zeros(len(data), np.bool)
+    eras = data.unique_era()
+    for e in eras:
+        idx = era == e
+        n = idx.sum()
+        nfrac = int(fraction * n)
+        idx = np.where(idx)[0]
+        rs.shuffle(idx)
+        idx = idx[:nfrac]
+        bool_idx[idx] = 1
+    frac_data = data[bool_idx]
+    return frac_data

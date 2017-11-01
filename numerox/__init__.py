@@ -4,7 +4,7 @@
 from numerox.data import Data
 from numerox.prediction import Prediction
 from numerox.report import Report
-from numerox.examples import LogRegModel
+from numerox.model import LogRegModel
 
 # load
 from numerox.data import load_data, load_zip
@@ -25,7 +25,6 @@ from numerox.run import backtest
 
 # misc
 from numerox.data import concat
-from numerox.util import row_sample
 from numerox.version import __version__
 
 try:
