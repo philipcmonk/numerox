@@ -20,10 +20,11 @@ model)::
             yhat = model.predict_proba(data_predict.x)[:, 1]
             return data_predict.ids, yhat
 
-Once you have a model numerox will do the rest::
+Once you have a model numerox will do the rest. First download the Numerai
+dataset and then load it (there is no need to unzip the archive)::
 
     >>> import numerox as nx
-    >>> model = nx.LogRegModel(C=1)
+    >>> nx.download_dataset('numerai_dataset.zip')
     >>> data = nx.load_zip('numerai_dataset.zip')
     >>> data
     region    live, test, train, validation
@@ -31,6 +32,10 @@ Once you have a model numerox will do the rest::
     era       98, [era1, eraX]
     x         50, min 0.0000, mean 0.4993, max 1.0000
     y         mean 0.499961, fraction missing 0.3109
+
+Next, run 5-fold cross validation on the training data::
+
+    >>> model = nx.LogRegModel(C=1)
     >>> prediction = nx.backtest(model, data['train'], kfold=5, seed=0, verbosity=1)
           logloss   auc     acc     ystd
     mean  0.692770  0.5197  0.5137  0.0281  |  region   train
@@ -41,7 +46,7 @@ Once you have a model numerox will do the rest::
 We are getting a consistency (fraction of eras with logloss less than ln(2))
 of around 52% on the training data. That is way below the 75% consistency
 required by Numerai on the validation data. So let's adjust the model's single
-parameter C, the inverse of regularization::
+parameter C, the inverse of L2 regularization::
 
     >>> model = nx.LogRegModel(C=0.00001)
     >>> prediction = nx.backtest(model, data['train'], verbosity=1)
@@ -51,7 +56,8 @@ parameter C, the inverse of regularization::
     min   0.692360  0.4550  0.4660  0.0020  |  consis   0.7647
     max   0.693589  0.5875  0.5606  0.0027  |  75th     0.6931
 
-Let's make a submission file for the tournament::
+OK, results are good enough for a demo so let's make a submission file for the
+tournament::
 
     >>> prediction = nx.production(model, data)
           logloss   auc     acc     ystd
@@ -201,7 +207,8 @@ This is what you need to run numerox::
 - pandas
 - pytables
 - sklearn
-- nose (unit tests)
+- requests
+- nose
 
 Install with pipi (not yet working)::
 

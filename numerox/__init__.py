@@ -24,6 +24,7 @@ from numerox.run import production
 from numerox.run import backtest
 
 # misc
+from numerox.web import download_dataset
 from numerox.data import concat
 from numerox.version import __version__
 
