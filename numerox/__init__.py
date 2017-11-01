@@ -5,6 +5,7 @@ from numerox.data import Data
 from numerox.prediction import Prediction
 from numerox.report import Report
 from numerox.model import LogRegModel
+from numerox.model import ExtraTreesModel
 
 # load
 from numerox.data import load_data, load_zip
