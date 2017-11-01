@@ -1,24 +1,9 @@
 numerox
 =======
 
-Numerox is a Numerai machine learning competition toolbox written in Python.
+Numerox is a Numerai competition toolbox written in Python.
 
-All you have to do is create a model. (Look away while I type my prize-winning
-model)::
-
-    from sklearn.linear_model import LogisticRegression
-
-    class logistic(object):  # must have fit_predict method
-
-        def __init__(self, C=0.00001):  # add whatever inputs you need
-            self.C = C
-
-        # must take two datas (fit, predict) and return (ids, yhat) arrays
-        def fit_predict(self, data_fit, data_predict):
-            model = LogisticRegression(C=self.C)
-            model.fit(data_fit.x, data_fit.y)
-            yhat = model.predict_proba(data_predict.x)[:, 1]
-            return data_predict.ids, yhat
+All you have to do is create a model. Take a look at ``model.py`` for examples.
 
 Once you have a model numerox will do the rest. First download the Numerai
 dataset and then load it (there is no need to unzip it)::
@@ -33,10 +18,23 @@ dataset and then load it (there is no need to unzip it)::
     x         50, min 0.0000, mean 0.4993, max 1.0000
     y         mean 0.499961, fraction missing 0.3109
 
-Next, run 5-fold cross validation on the training data::
+Let's use the extratrees model in numerox to run 5-fold cross validation on the
+training data::
+
+    >>> model = nx.model.extratrees()
+    >>> prediction = nx.backtest(model, data['train'], verbosity=1)
+    extratrees(depth=3, ntrees=100, seed=0, nfeatures=7)
+          logloss   auc     acc     ystd
+    mean  0.692565  0.5236  0.5162  0.0086  |  region   train
+    std   0.000868  0.0280  0.0214  0.0006  |  eras     85
+    min   0.690201  0.4529  0.4641  0.0075  |  consis   0.7294
+    max   0.694862  0.5925  0.5679  0.0097  |  75th     0.6933
+
+And logistic regression::
 
     >>> model = nx.model.logistic()
     >>> prediction = nx.backtest(model, data['train'], verbosity=1)
+    logistic(inverse_l2=1e-05)
           logloss   auc     acc     ystd
     mean  0.692974  0.5226  0.5159  0.0023  |  region   train
     std   0.000224  0.0272  0.0205  0.0002  |  eras     85
@@ -47,12 +45,13 @@ OK, results are good enough for a demo so let's make a submission file for the
 tournament::
 
     >>> prediction = nx.production(model, data)
+    logistic(inverse_l2=1e-05)
           logloss   auc     acc     ystd
     mean  0.692993  0.5157  0.5115  0.0028  |  region   validation
     std   0.000225  0.0224  0.0172  0.0000  |  eras     12
     min   0.692440  0.4853  0.4886  0.0028  |  consis   0.7500
     max   0.693330  0.5734  0.5555  0.0028  |  75th     0.6931
-    >>> prediction.to_csv('logistic.csv')  # saves 6 decimal places by default
+    >>> prediction.to_csv('logistic.csv')  # saves 8 decimal places by default
 
 Both the ``production`` and ``backtest`` functions are just very thin wrappers
 around the ``run`` function::

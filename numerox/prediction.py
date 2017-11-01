@@ -38,7 +38,7 @@ class Prediction(object):
                 raise IndexError("Overlap in ids found")
         self.df = df
 
-    def to_csv(self, path_or_buf=None, decimals=6):
+    def to_csv(self, path_or_buf=None, decimals=8):
         "Save a csv file of predictions for later upload to Numerai"
         float_format = "%.{}f".format(decimals)
         return self.df.to_csv(path_or_buf, float_format=float_format)

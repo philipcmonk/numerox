@@ -1,7 +1,11 @@
+import pprint
+
 from numerox import Prediction, tournament_splitter, cv_splitter
 
 
 def run(model, data, splitter, verbosity=2):
+    if verbosity > 0:
+        pprint.pprint(model)
     prediction = Prediction()
     for data_fit, data_predict in splitter:
         ids, yhat = model.fit_predict(data_fit, data_predict)
