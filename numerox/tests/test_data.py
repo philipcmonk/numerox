@@ -1,8 +1,23 @@
+import tempfile
+
 import numpy as np
 from nose.tools import ok_
 
+from numerox.data import load_data
 from numerox.testing import load_play_data, shares_memory, micro_data
 from numerox.testing import assert_data_equal as ade
+
+
+def test_data_roundtrip():
+    "Saving and then loading data shouldn't change data"
+    d = micro_data()
+    with tempfile.NamedTemporaryFile() as temp:
+        d.save(temp.name)
+        d2 = load_data(temp.name)
+        ade(d, d2, "data corrupted during roundtrip")
+        d.save(temp.name, compress=True)
+        d2 = load_data(temp.name)
+        ade(d, d2, "data corrupted during roundtrip")
 
 
 def test_data_indexing():
@@ -49,7 +64,7 @@ def test_empty_data():
 def test_data_copies():
     "data properties should be copies"
 
-    d = load_play_data()
+    d = micro_data()
 
     ok_(shares_memory(d, d), "looks like shares_memory failed")
     ok_(~shares_memory(d, d.copy()), "should be a copy")
@@ -64,7 +79,7 @@ def test_data_copies():
 def test_data_properties():
     "data properties should not be corrupted"
 
-    d = load_play_data()
+    d = micro_data()
 
     ok_((d.ids == d.df.index).all(), "ids is corrupted")
     ok_((d.era == d.df.era).all(), "era is corrupted")
