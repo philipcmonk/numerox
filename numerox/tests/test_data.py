@@ -4,7 +4,7 @@ import numpy as np
 from nose.tools import ok_
 
 from numerox.data import load_data
-from numerox.testing import load_play_data, shares_memory, micro_data
+from numerox.testing import shares_memory, micro_data
 from numerox.testing import assert_data_equal as ade
 
 
@@ -91,3 +91,9 @@ def test_data_properties():
     x = d.x
     for i, name in enumerate(d._x_names()):
         ok_((x[:, i] == d.df[name]).all(), "%s is corrupted" % name)
+
+
+def test_data_repr():
+    "make sure data__repr__() runs"
+    d = micro_data()
+    d.__repr__()

@@ -206,9 +206,9 @@ failures)::
     >>> import numerox as nx
     >>> nx.test()
     <snip>
-    Ran 7 tests 0.429
+    Ran 8 tests 0.429
     OK
-    <nose.result.TextTestResult run=7 errors=0 failures=0>
+    <nose.result.TextTestResult run=8 errors=0 failures=0>
 
 Resources
 =========
