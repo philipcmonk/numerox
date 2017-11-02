@@ -18,7 +18,8 @@ def cheat_splitter(data):
 
 
 def split_splitter(data, fit_fraction, seed=0):
-    "Single split yieldis fit, predict data of approx fit fraction specified"
+    "Single fit-predict split of train data"
+    data = data['train']
     eras = data.unique_era()
     rs = np.random.RandomState(seed)
     rs.shuffle(eras)
@@ -29,7 +30,8 @@ def split_splitter(data, fit_fraction, seed=0):
 
 
 def cv_splitter(data, kfold=5, seed=0):
-    "Cross validation iterator that yields fit, predict data across eras"
+    "K-fold cross validation fit-predict splits across train eras"
+    data = data['train']
     kf = KFold(n_splits=kfold, shuffle=True, random_state=seed)
     eras = data.unique_era()
     for train_index, test_index in kf.split(eras):

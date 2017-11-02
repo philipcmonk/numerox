@@ -163,5 +163,5 @@ if __name__ == '__main__':
     import numerox as nx
     data = nx.load_data('/data/nx/numerai_dataset_20171024.hdf')
     model = nx.model.logistic()
-    prediction = nx.backtest(model, data['train'], verbosity=1)
+    prediction = nx.backtest(model, data, verbosity=1)
     prediction = nx.production(model, data)

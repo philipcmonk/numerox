@@ -22,7 +22,7 @@ Let's use the extratrees model in numerox to run 5-fold cross validation on the
 training data::
 
     >>> model = nx.model.extratrees()
-    >>> prediction = nx.backtest(model, data['train'], verbosity=1)
+    >>> prediction = nx.backtest(model, data, verbosity=1)
     extratrees(depth=3, ntrees=100, seed=0, nfeatures=7)
           logloss   auc     acc     ystd
     mean  0.692565  0.5236  0.5162  0.0086  |  region   train
@@ -33,7 +33,7 @@ training data::
 And logistic regression::
 
     >>> model = nx.model.logistic()
-    >>> prediction = nx.backtest(model, data['train'], verbosity=1)
+    >>> prediction = nx.backtest(model, data, verbosity=1)
     logistic(inverse_l2=1e-05)
           logloss   auc     acc     ystd
     mean  0.692974  0.5226  0.5159  0.0023  |  region   train
@@ -64,8 +64,8 @@ comes with five splitters:
 - ``tournament_splitter`` fit: train; predict: tournament (production)
 - ``validation_splitter`` fit: train; predict validation
 - ``cheat_splitter`` fit: train+validation; predict tournament
-- ``cv_splitter`` k-fold CV across eras (backtest)
-- ``split_splitter`` single split with specified fraction of data for fitting
+- ``cv_splitter`` k-fold CV across train eras (backtest)
+- ``split_splitter`` single split of train data across eras
 
 Warning
 =======
