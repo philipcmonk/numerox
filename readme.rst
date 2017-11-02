@@ -56,7 +56,7 @@ tournament::
 Both the ``production`` and ``backtest`` functions are just very thin wrappers
 around the ``run`` function::
 
-    >>> prediction = nx.run(model, data, splitter, verbosity=2)
+    >>> prediction = nx.run(model, splitter, verbosity=2)
 
 where ``splitter`` iterates through fit, predict splits of the data. Numerox
 comes with four splitters:
