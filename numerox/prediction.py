@@ -124,6 +124,10 @@ class Prediction(object):
         "Return column names of dataframe as a list"
         return self.df.columns.tolist()
 
+    def __add__(self, other_prediction):
+        "Concatenate two prediction objects that have no overlap in ids"
+        return concat_prediction([self, other_prediction])
+
     def __repr__(self):
         if self.df is None:
             return ''
@@ -145,6 +149,18 @@ def load_prediction(file_path):
     return Prediction(df)
 
 
+def concat_prediction(predictions):
+    "Concatenate list-like of prediction objects; ids must not overlap"
+    dfs = [d.df for d in predictions]
+    try:
+        df = pd.concat(dfs, verify_integrity=True, copy=True)
+    except ValueError:
+        # pandas doesn't raise expected IndexError and for our large data
+        # object, the id overlaps that it prints can be very long so
+        raise IndexError("Overlap in ids found")
+    return Prediction(df)
+
+
 def calc_metrics(arr):
     y = arr[:, 0]
     yhat = arr[:, 1]
@@ -163,5 +179,7 @@ if __name__ == '__main__':
     import numerox as nx
     data = nx.load_data('/data/nx/numerai_dataset_20171024.hdf')
     model = nx.model.logistic()
-    prediction = nx.backtest(model, data, verbosity=1)
-    prediction = nx.production(model, data)
+    prediction1 = nx.backtest(model, data, verbosity=1)
+    prediction2 = nx.production(model, data)
+    prediction = prediction1 + prediction2
+    prediction.performance(data)

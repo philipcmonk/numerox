@@ -154,7 +154,7 @@ class Data(object):
         return self.df.equals(other_data.df)
 
     def __add__(self, other_data):
-        "concatenate two data objects"
+        "concatenate two data objects that have no overlap in ids"
         return concat([self, other_data])
 
     def __repr__(self):
@@ -213,7 +213,7 @@ def load_zip(file_path):
 
 
 def concat(datas):
-    "Concatenate data objects; ids must not overlap; datas is an iterable"
+    "Concatenate list-like of data objects; ids must not overlap"
     dfs = [d.df for d in datas]
     try:
         df = pd.concat(dfs, verify_integrity=True, copy=True)
