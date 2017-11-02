@@ -64,35 +64,19 @@ class Prediction(object):
         # separate performance for each region
         regions = ['train', 'validation']
         for region in regions:
-
-            # pull out region
-            idx = df.region.isin([region])
-            df_region = df[idx]
-            if len(df_region) == 0:
+            metrics = _calc_metrics(df, region, 'yhat')
+            if metrics is None:
                 continue
-
-            # calc metrics for each era
-            eras = df_region.era.unique()
-            metrics = []
-            for era in eras:
-                idx = df_region.era.isin([era])
-                df_era = df_region[idx]
-                arr = df_era[['y', 'yhat']].values
-                m = calc_metrics(arr)
-                metrics.append(m)
-            metrics = np.array(metrics)
-
-            # display performance
             print("      logloss   auc     acc     ystd")
             fmt = "{:<4}  {:.6f}  {:.4f}  {:.4f}  {:.4f}{extra}"
             extra = "  |  {:<7}  {:<}".format('region', region)
             print(fmt.format('mean', *metrics.mean(axis=0), extra=extra))
             extra = "  |  {:<7}  {:<}".format('eras', metrics.shape[0])
             print(fmt.format('std', *metrics.std(axis=0), extra=extra))
-            consistency = (metrics[:, 0] < np.log(2)).mean()
+            consistency = (metrics['logloss'] < np.log(2)).mean()
             extra = "  |  {:<7}  {:<.4f}".format('consis', consistency)
             print(fmt.format('min', *metrics.min(axis=0), extra=extra))
-            prctile = np.percentile(metrics[:, 0], 75)
+            prctile = np.percentile(metrics['logloss'], 75)
             extra = "  |  {:<7}  {:<.4f}".format('75th', prctile)
             print(fmt.format('max', *metrics.max(axis=0), extra=extra))
 
@@ -161,9 +145,35 @@ def concat_prediction(predictions):
     return Prediction(df)
 
 
-def calc_metrics(arr):
-    y = arr[:, 0]
-    yhat = arr[:, 1]
+def _calc_metrics(df, region, column_name):
+    "`df` must contain at least era, region, y and `column_name`"
+
+    # pull out region
+    idx = df.region.isin([region])
+    df_region = df[idx]
+    if len(df_region) == 0:
+        return None
+
+    # calc metrics for each era
+    eras = df_region.era.unique()
+    metrics = []
+    for era in eras:
+        idx = df_region.era.isin([era])
+        df_era = df_region[idx]
+        arr = df_era[['y', column_name]].values
+        m = _calc_metrics_1era(arr[:, 0], arr[:, 1])
+        metrics.append(m)
+    metrics = np.array(metrics)
+
+    # jam into a dataframe
+    columns = ['logloss', 'auc', 'acc', 'ystd']
+    metrics = pd.DataFrame(metrics, columns=columns, index=eras)
+
+    return metrics
+
+
+def _calc_metrics_1era(y, yhat):
+    "standard metrics for `yhat` given actual outcome `y`"
     m = []
     m.append(log_loss(y, yhat))
     m.append(roc_auc_score(y, yhat))
@@ -178,10 +188,10 @@ if __name__ == '__main__':
     # test prediction.performance()
     import numerox as nx
     data = nx.load_data('/data/nx/numerai_dataset_20171024.hdf')
-    """
     model = nx.model.logistic()
     prediction1 = nx.backtest(model, data, verbosity=1)
     prediction2 = nx.production(model, data)
+    """
     prediction = prediction1 + prediction2
     print prediction
     prediction.performance(data)
@@ -196,7 +206,6 @@ if __name__ == '__main__':
         prediction2 = nx.production(model, data)
         prediction = prediction1 + prediction2
         prediction.save('/data/nx/pred/logistic_{:.0e}.pred'.format(c))
-    """
 
     for n in (2, 3, 5, 7):
         model = nx.model.extratrees(nfeatures=n)
@@ -204,3 +213,4 @@ if __name__ == '__main__':
         prediction2 = nx.production(model, data)
         prediction = prediction1 + prediction2
         prediction.save('/data/nx/pred/extratrees_nfeature{}.pred'.format(n))
+    """
