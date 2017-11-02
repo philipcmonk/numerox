@@ -133,7 +133,7 @@ class Prediction(object):
             return ''
         t = []
         fmt = '{:<10}{:>13.6f}'
-        y = self.df.y
+        y = self.df.yhat
         t.append(fmt.format('mean', y.mean()))
         t.append(fmt.format('std', y.std()))
         t.append(fmt.format('min', y.min()))
@@ -182,4 +182,5 @@ if __name__ == '__main__':
     prediction1 = nx.backtest(model, data, verbosity=1)
     prediction2 = nx.production(model, data)
     prediction = prediction1 + prediction2
+    print prediction
     prediction.performance(data)

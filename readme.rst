@@ -22,7 +22,7 @@ Let's use the extratrees model in numerox to run 5-fold cross validation on the
 training data::
 
     >>> model = nx.model.extratrees()
-    >>> prediction = nx.backtest(model, data, verbosity=1)
+    >>> prediction1 = nx.backtest(model, data, verbosity=1)
     extratrees(depth=3, ntrees=100, seed=0, nfeatures=7)
           logloss   auc     acc     ystd
     mean  0.692565  0.5236  0.5162  0.0086  |  region   train
@@ -33,7 +33,7 @@ training data::
 And logistic regression::
 
     >>> model = nx.model.logistic()
-    >>> prediction = nx.backtest(model, data, verbosity=1)
+    >>> prediction2 = nx.backtest(model, data, verbosity=1)
     logistic(inverse_l2=1e-05)
           logloss   auc     acc     ystd
     mean  0.692974  0.5226  0.5159  0.0023  |  region   train
@@ -44,14 +44,45 @@ And logistic regression::
 OK, results are good enough for a demo so let's make a submission file for the
 tournament::
 
-    >>> prediction = nx.production(model, data)
+    >>> prediction3 = nx.production(model, data)
     logistic(inverse_l2=1e-05)
           logloss   auc     acc     ystd
     mean  0.692993  0.5157  0.5115  0.0028  |  region   validation
     std   0.000225  0.0224  0.0172  0.0000  |  eras     12
     min   0.692440  0.4853  0.4886  0.0028  |  consis   0.7500
     max   0.693330  0.5734  0.5555  0.0028  |  75th     0.6931
-    >>> prediction.to_csv('logistic.csv')  # saves 8 decimal places by default
+    >>> prediction3.to_csv('logistic.csv')  # 8 decimal places by default
+
+There is no overlap in ids between prediction2 (train) and prediction3
+(tournament) so you can add (concatenate) them if you're into that::
+
+    >>> prediction = prediction2 + prediction3
+    >>> prediction
+    mean           0.499948
+    std            0.002513
+    min            0.489406
+    max            0.509561
+    rows      884544.000000
+    nulls          0.000000
+    >>> prediction.performance(data)
+          logloss   auc     acc     ystd
+    mean  0.692974  0.5226  0.5159  0.0023  |  region   train
+    std   0.000224  0.0272  0.0205  0.0002  |  eras     85
+    min   0.692360  0.4550  0.4660  0.0020  |  consis   0.7647
+    max   0.693589  0.5875  0.5606  0.0027  |  75th     0.6931
+          logloss   auc     acc     ystd
+    mean  0.692993  0.5157  0.5115  0.0028  |  region   validation
+    std   0.000225  0.0224  0.0172  0.0000  |  eras     12
+    min   0.692440  0.4853  0.4886  0.0028  |  consis   0.7500
+    max   0.693330  0.5734  0.5555  0.0028  |  75th     0.6931
+
+And save the result::
+
+    >>> prediction.save('logloss_c1e-05.pred')
+
+Once you have run and saved several predictions, you can make a report::
+
+    >> TODO
 
 Both the ``production`` and ``backtest`` functions are just very thin wrappers
 around the ``run`` function::
