@@ -78,11 +78,11 @@ There is no overlap in ids between prediction2 (train) and prediction3
 
 And save the result::
 
-    >>> prediction.save('logloss_c1e-05.pred')
+    >>> prediction.save('logloss_1e-05.pred')
 
 Once you have run and saved several predictions, you can make a report::
 
-    >> TODO
+    >>> TODO
 
 Both the ``production`` and ``backtest`` functions are just very thin wrappers
 around the ``run`` function::
