@@ -12,6 +12,11 @@ def validation_splitter(data):
     yield data['train'], data['validation']
 
 
+def cheat_splitter(data):
+    "Single split yielding train+validation, tournament data"
+    yield data.region_isin(['train', 'validation']), data['tournament']
+
+
 def split_splitter(data, fit_fraction, seed=0):
     "Single split yieldis fit, predict data of approx fit fraction specified"
     eras = data.unique_era()
