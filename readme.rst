@@ -221,6 +221,7 @@ Install
 This is what you need to run numerox::
 
 - python
+- setuptools
 - numpy
 - pandas
 - pytables

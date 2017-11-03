@@ -27,15 +27,23 @@ def get_version_str():
 
 
 CLASSIFIERS = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 3 - Alpha",
     "Environment :: Console",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: GNU General Public License v3"
-    "or later (GPLv3+)",
+    "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
+    "Programming Language :: Python :: 2",
     "Programming Language :: Python :: 3",
     "Topic :: Scientific/Engineering"]
+
+
+REQUIRES = ['numpy',
+            'pandas',
+            'tables',
+            'scikit-learn',
+            'requests',
+            'nose']
 
 
 metadata = dict(name='numerox',
@@ -43,11 +51,10 @@ metadata = dict(name='numerox',
                 description=SHORT_DESCRIPTION,
                 long_description=get_long_description(),
                 url="https://github.com/kwgoodman/numerox",
-                license="GNU GPLv3+",
+                license="Simplified BSD",
                 classifiers=CLASSIFIERS,
                 platforms="OS Independent",
                 version=get_version_str(),
-                packages=find_packages())
-
-
+                packages=find_packages(),
+                install_requires=REQUIRES)
 setup(**metadata)
