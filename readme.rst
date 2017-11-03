@@ -1,5 +1,5 @@
-.. image:: https://travis-ci.org/kwgoodman/bottleneck.svg?branch=master
-    :target: https://travis-ci.org/kwgoodman/bottleneck
+.. image:: https://travis-ci.org/kwgoodman/numerox.svg?branch=master
+    :target: https://travis-ci.org/kwgoodman/numerox
 numerox
 =======
 
