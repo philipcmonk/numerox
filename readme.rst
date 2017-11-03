@@ -201,7 +201,7 @@ era.
 Install
 =======
 
-This is what you need to run numerox::
+This is what you need to run numerox:
 
 - python
 - setuptools
@@ -229,8 +229,10 @@ failures)::
 Resources
 =========
 
-Questions, comments, suggests: Numerai's slack channel and on github:
-https://github.com/kwgoodman/numerox/issues.
+Questions, comments, suggests, bugs:
+
+- https://community.numer.ai
+- https://github.com/kwgoodman/numerox/issues.
 
 License
 =======
