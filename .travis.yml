@@ -26,7 +26,7 @@ matrix:
         # python 3.6
         - os: linux
           env: TEST_DEPS="numpy pandas pytables scikit-learn nose"
-               PYTHON_VERSION="3.5"
+               PYTHON_VERSION="3.6"
                PYTHON_ARCH="64"
 
 before_install:
