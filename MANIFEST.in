@@ -1,3 +1,4 @@
 include readme.rst
 include release.rst
 include LICENSE
+include numerox/tests/test_data.hdf
