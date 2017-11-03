@@ -56,5 +56,7 @@ metadata = dict(name='numerox',
                 platforms="OS Independent",
                 version=get_version_str(),
                 packages=find_packages(),
+                package_data={'numerox': ['LICENSE', 'readme.rst',
+                              'release.rst', 'tests/test_data.hdf']},
                 install_requires=REQUIRES)
 setup(**metadata)
