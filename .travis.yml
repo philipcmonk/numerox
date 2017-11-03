@@ -5,7 +5,7 @@ sudo: false
 matrix:
     include:
 
-         # flake8
+         # flake8 
         - os: linux
           env: TEST_DEPS="flake8" PYTHON_VERSION="2.7" PYTHON_ARCH="64" TEST_RUN="style"
 
