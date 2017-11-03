@@ -39,6 +39,7 @@ class Model(object):
             msg += model + "()"
         return msg
 
+
 class logistic(Model):
 
     def __init__(self, inverse_l2=0.00001):
