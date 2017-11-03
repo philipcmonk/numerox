@@ -11,4 +11,4 @@ numerox 0.0.1
 
 *Release date: Not yet released; in development*
 
-- Initial release of numerox and its Data class
+- Preview release of numerox

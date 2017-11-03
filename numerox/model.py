@@ -8,16 +8,16 @@ Make your own model
 
 First take a look at the logistic and extratrees models below.
 
-They both inherit from The Model class. That is optional. But if you do
-inherit from Model and if you place your parameters in self.p as is done in
-the models below then you will get a nice printout (model name and parameters)
-when you run your model.
-
 Your model MUST have a fit_predict method that takes two data objects as
 input. The first is training data, the second is prediction data.
 
 The fit_predict method MUST return two numpy arrays. The first contains the
 ids, the second the predictions. Make sure that these two arrays stay aligned!
+
+The models below inherit from The Model class. That is optional. But if you do
+inherit from Model and if you place your parameters in self.p as is done in
+the models below then you will get a nice printout (model name and parameters)
+when you run your model.
 
 OK, now go make money!
 
