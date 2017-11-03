@@ -4,7 +4,7 @@ import os
 from setuptools import setup, find_packages
 
 
-SHORT_DESCRIPTION = ("Numerox is a Numerai machine learning competition"
+SHORT_DESCRIPTION = ("Numerox is a Numerai machine learning competition "
                      "toolbox written in Python")
 
 
