@@ -54,31 +54,11 @@ tournament::
     >>> prediction3.to_csv('logistic.csv')  # 8 decimal places by default
 
 There is no overlap in ids between prediction2 (train) and prediction3
-(tournament) so you can add (concatenate) them if you're into that::
+(tournament) so you can add (concatenate) them if you're into that and let's
+go ahead and save the result::
 
     >>> prediction = prediction2 + prediction3
-    >>> prediction
-    mean           0.499948
-    std            0.002513
-    min            0.489406
-    max            0.509561
-    rows      884544.000000
-    nulls          0.000000
-    >>> prediction.performance(data)
-          logloss   auc     acc     ystd
-    mean  0.692974  0.5226  0.5159  0.0023  |  region   train
-    std   0.000224  0.0272  0.0205  0.0002  |  eras     85
-    min   0.692360  0.4550  0.4660  0.0020  |  consis   0.7647
-    max   0.693589  0.5875  0.5606  0.0027  |  75th     0.6931
-          logloss   auc     acc     ystd
-    mean  0.692993  0.5157  0.5115  0.0028  |  region   validation
-    std   0.000225  0.0224  0.0172  0.0000  |  eras     12
-    min   0.692440  0.4853  0.4886  0.0028  |  consis   0.7500
-    max   0.693330  0.5734  0.5555  0.0028  |  75th     0.6931
-
-And save the result::
-
-    >>> prediction.save('logloss_1e-05.pred')
+    >>> prediction.save('logloss_1e-05.pred')  # HDF5
 
 Once you have run and saved several predictions, you can make a report::
 
@@ -105,6 +85,9 @@ This preview release has minimal unit tests coverage (yikes!) and the code
 has seen little use. The next release will likely break any code you write
 using numerox---the api is not yet stable. Please report any bugs or such
 to https://github.com/kwgoodman/numerox/issues.
+
+The next release will focus on bug fixes, adding unit tests, and design
+tweaks.
 
 Data class
 ==========
