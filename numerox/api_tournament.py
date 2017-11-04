@@ -26,8 +26,6 @@ class ApiTournament:
                 'Token {}${}'.format(public_id, secret_key)
 
         r = requests.post(API_TOURNAMENT_URL, json=body, headers=headers)
-        print(r)
-        print(r.text)
         return r.json()
 
     def upload_submission(self, full_filename):
@@ -57,4 +55,4 @@ class ApiTournament:
             '''
         create = self.call(create_query,
                            {'filename': submission_auth['filename']})
-        print(create)
+        return create['data']['create_submission']['id']
